@@ -24,6 +24,9 @@
           GitHub
         </a>
       </div>
+
+    <HabitChains>
+
     </div>
   </div>
 </template>
@@ -31,15 +34,25 @@
 <script lang="ts">
 import Vue from 'vue'
 import Logo from '~/components/Logo.vue'
+import HabitChains from '~/components/habit-chains.vue'
 
 export default Vue.extend({
   components: {
-    Logo
+    Logo,
+    HabitChains,
   }
 })
 </script>
 
 <style>
+body {
+  background: #84fab0;
+  background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  overflow:hidden;
+}
+
 .container {
   margin: 0 auto;
   min-height: 100vh;
