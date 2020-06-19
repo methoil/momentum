@@ -1,24 +1,17 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Link from "./components/link";
 
 function App() {
+  const links = [];
+  for (let i = 0; i < 10; i++) {
+    links.push(<Link active={!(i % 2)}></Link>);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <header className="App-header">Momentum - powerfully build habits</header>
+      <div>{links}</div>
     </div>
   );
 }
