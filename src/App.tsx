@@ -1,21 +1,23 @@
 import React from "react";
 import "./App.css";
-import Link from "./components/link";
-import HabitCard from "./components/habit-card";
+import HabitChain from "./components/habit-chain";
 import habits from "./mock-data.json";
 
 function App() {
   const timePeriods = [];
   for (let habit of habits) {
-    const links = [];
-    // for mock, started 10 days ago
-    links.push(<HabitCard habitMeta={habit}></HabitCard>);
+    const history = new Array(10)
+      .fill(null)
+      .map((entry) => Math.random() * 2 > 1);
+    const chainComp = (
+      <HabitChain
+        habitMeta={habit}
+        history={history}
+        key={Math.random()}
+      ></HabitChain>
+    );
 
-    for (let i = 0; i < 10; i++) {
-      links.push(<Link active={!(i % 2)}></Link>);
-    }
-
-    timePeriods.push(<div className="time-period-container">{links}</div>);
+    timePeriods.push(chainComp);
   }
 
   return (

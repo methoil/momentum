@@ -41,6 +41,7 @@
 .time-period-container {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .chains-container {
