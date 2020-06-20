@@ -1,17 +1,14 @@
 [
   {
-    "hardExercise": {
-      "type": "daily"
-    }
+    "name": "hardExercise",
+    "type": "daily"
   },
   {
-    "code": {
-      "type": "daily"
-    }
+    "name": "code",
+    "type": "daily"
   },
   {
-    "meditate": {
-      "type": "daily"
-    }
+    "name": "meditate",
+    "type": "daily"
   }
 ]

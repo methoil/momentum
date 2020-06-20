@@ -5,32 +5,22 @@ import habits from "./mock-data.json";
 
 function App() {
   const timePeriods = [];
-  for (let habit in habits) {
+  for (let habit of habits) {
     const links = [];
     // for mock, started 10 days ago
+    links.push(<div>{habit.name}</div>);
+
     for (let i = 0; i < 10; i++) {
-      links.push(
-        <div>
-          <span>{habits[habit]}</span>
-          <span>
-            <Link active={!(i % 2)}></Link>
-          </span>
-        </div>
-      );
+      links.push(<Link active={!(i % 2)}></Link>);
     }
 
-    timePeriods.push(
-      <div>
-        <span></span>
-        <span>{links}</span>
-      </div>
-    );
+    timePeriods.push(<div className="time-period-container">{links}</div>);
   }
 
   return (
     <div className="App">
       <header className="App-header">Momentum - powerfully build habits</header>
-      <div className="links-container">{timePeriods}</div>
+      <div className="chains-container">{timePeriods}</div>
     </div>
   );
 }
