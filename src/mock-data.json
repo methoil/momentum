@@ -1,14 +1,17 @@
 [
   {
     "name": "hardExercise",
-    "type": "daily"
+    "type": "daily",
+    "dateStarted": "3/3/2020"
   },
   {
     "name": "code",
-    "type": "daily"
+    "type": "daily",
+    "dateStarted": "4/20/2020"
   },
   {
     "name": "meditate",
-    "type": "daily"
+    "type": "daily",
+    "dateStarted": "3/3/2010"
   }
 ]

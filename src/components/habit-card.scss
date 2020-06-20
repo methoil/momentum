@@ -1,0 +1,19 @@
+.habit-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: baseline;
+  background-color: aliceblue;
+  height: 7rem;
+  width: 9rem;
+  margin: 1rem;
+  border: solid black 2px;
+}
+
+.habit-card-text-item {
+  padding-left: 0.5rem;
+}
+
+.strong {
+  font-weight: bold;
+}
