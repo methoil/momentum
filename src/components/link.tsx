@@ -1,16 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./link.scss";
 
 interface ILinkProps {
   active: boolean;
 }
 
-function link(props: ILinkProps) {
-  return <div className={getClass(props.active)}></div>;
-}
+export default function Link(props: ILinkProps) {
+  // TODO: Set this in central store and just display prop val here
+  const [active, setActive] = useState(false);
+  useEffect(() => {
+    setActive(props.active);
+  }, [props.active]);
 
-function getClass(active: boolean): string {
-  return "link-circle " + (active ? "on" : "off");
-}
+  return <div className={getClass(active)} onClick={toggleStatus}></div>;
 
-export default link;
+  function getClass(active: boolean): string {
+    return "link-circle " + (active ? "on" : "off");
+  }
+
+  function toggleStatus(event: React.MouseEvent) {
+    // TODO: set this in store
+    setActive(!active);
+  }
+}

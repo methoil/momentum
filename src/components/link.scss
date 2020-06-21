@@ -4,7 +4,10 @@
   width: 3rem;
   height: 3rem;
   margin: 1rem;
-  // background-color: aliceblue;
+  cursor: pointer;
+}
+.link-circle:hover {
+  box-shadow: 0px 0px 20px aliceblue;
 }
 
 .on {
