@@ -22,7 +22,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">Momentum - powerfully build habits</header>
+      <h1 className="App-header">Momentum</h1>
       <div className="chains-container">{timePeriods}</div>
     </div>
   );
