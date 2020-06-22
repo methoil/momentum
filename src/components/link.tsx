@@ -7,7 +7,8 @@ interface ILinkProps {
 
 export default function Link(props: ILinkProps) {
   // TODO: Set this in central store and just display prop val here
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState<boolean>(false);
+
   useEffect(() => {
     setActive(props.active);
   }, [props.active]);

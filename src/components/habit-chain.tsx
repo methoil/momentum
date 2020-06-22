@@ -2,14 +2,14 @@ import React from "react";
 // import "./habit-chain.scss";
 import Link from "./link";
 import HabitCard from "./habit-card";
+import { IHabitMeta } from "../habits.model";
 
 interface IProps {
   history: Array<boolean>;
-  habitMeta: { name: string; type: string; dateStarted: string };
+  habitMeta: IHabitMeta;
 }
 
-export default function HabitChain(props: IProps) {
-  const { history, habitMeta } = props;
+export const HabitChain: React.FC<IProps> = ({ history, habitMeta }) => {
   const links = [];
   // for mock, started 10 days ago
   links.push(<HabitCard habitMeta={habitMeta} key={Math.random()}></HabitCard>);
@@ -19,4 +19,4 @@ export default function HabitChain(props: IProps) {
   }
 
   return <div className="time-period-container">{links}</div>;
-}
+};
