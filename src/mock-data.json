@@ -2,16 +2,16 @@
   {
     "name": "hardExercise",
     "type": "daily",
-    "dateStarted": "3/3/2020"
+    "history": [true, false, true, true, false, true, true, true, true, false]
   },
   {
     "name": "code",
     "type": "daily",
-    "dateStarted": "4/20/2020"
+    "history": [true, false, true, true, false, true, true, true, true, false]
   },
   {
     "name": "meditate",
     "type": "daily",
-    "dateStarted": "3/3/2010"
+    "history": [true, false, true, true, false, true, true, true, true, false]
   }
 ]

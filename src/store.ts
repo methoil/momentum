@@ -1,25 +1,32 @@
 import { createStore } from "Redux";
 import { IHabitMeta } from "./habits.model";
+import { cloneDeep } from "lodash";
 
-type IState = { [key: string]: IHabitMeta };
+type IState = { habitHistory: { [key: string]: IHabitMeta } };
 
 interface IAction {
   type: string;
+  id: number;
   habitName: string;
   date: number; // access index of array for now
   payload: boolean;
 }
 
-const actionHandler = (state: IState = {}, action: IAction) => {
+const defaultState = {
+  habitHistory: {},
+};
+
+const reducer = (state: IState = defaultState, action: IAction) => {
+  const sCopy = cloneDeep(state);
   switch (action.type) {
     case "TOGGLE_DATE":
-      state[action.habitName].history[action.date] = action.payload;
-      return state;
+      sCopy.habitHistory[action.habitName].history[action.id] = action.payload;
+      return sCopy;
     default:
       return state;
   }
 };
 
-const store = createStore(actionHandler);
+const store = createStore(reducer);
 
 export default store;
