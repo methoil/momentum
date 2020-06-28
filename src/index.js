@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import "./index.css";
-import App from "./App";
+import App from "./app/App";
 import "fontsource-roboto";
-import store from "./store";
+import store from "./redux/reducer";
 
 ReactDOM.render(
   <Provider store={store}>

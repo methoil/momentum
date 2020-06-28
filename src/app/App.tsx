@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
-import { HabitChain } from "./components/habit-chain";
-import habits from "./mock-data.json";
+import { HabitChain } from "../components/habit-chain";
+import habits from "../mock-data.json";
 
 function App() {
   const timePeriods = [];

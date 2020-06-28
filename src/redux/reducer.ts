@@ -1,5 +1,5 @@
 import { createStore } from "Redux";
-import { IHabitMeta } from "./habits.model";
+import { IHabitMeta } from "../habits.model";
 import { cloneDeep } from "lodash";
 
 type IState = { habitHistory: { [key: string]: IHabitMeta } };
