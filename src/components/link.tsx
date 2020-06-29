@@ -3,6 +3,7 @@ import "./link.scss";
 
 interface ILinkProps {
   active: boolean;
+  callback: () => void;
 }
 
 export default function Link(props: ILinkProps) {
@@ -22,5 +23,6 @@ export default function Link(props: ILinkProps) {
   function toggleStatus(event: React.MouseEvent) {
     // TODO: set this in store
     setActive(!active);
+    props.callback();
   }
 }
