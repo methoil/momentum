@@ -18,7 +18,7 @@ export const toggleLinkAction = (id: string, name: string, payload: boolean): IT
   payload,
 });
 
-const defaultState = {
+const defaultState: IState = {
   habitHistory: {},
 };
 
@@ -28,7 +28,9 @@ const reducer = (state: IState = defaultState, action: ITodoAction) => {
     case 'TOGGLE_DATE':
       stateCopy.habitHistory[action.name].history[action.id] = action.payload;
       return stateCopy;
-    default:
+    case 'LOAD_DATES':
+        
+      default:
       return state;
   }
 };

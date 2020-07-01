@@ -4,4 +4,6 @@ export interface IHabitMeta {
   history: IHabitHistory;
 }
 
-export type IHabitHistory = boolean[];
+export type IHabitLink = { date: string; active: boolean };
+
+export type IHabitHistory = IHabitLink[];
