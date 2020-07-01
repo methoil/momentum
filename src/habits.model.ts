@@ -1,3 +1,7 @@
+export interface IHabitCollection {
+  [key: string]: IHabitMeta;
+}
+
 export interface IHabitMeta {
   name: string;
   type: string;

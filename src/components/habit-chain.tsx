@@ -21,7 +21,11 @@ export const HabitChain: React.FC<IProps> = ({ habitMeta }) => {
   for (let day of habitMeta.history) {
     const key = uuid();
     links.push(
-      <Link active={day.active} callback={onToggleLink(key, habitMeta.name, day.active)} key={key}></Link>,
+      <Link
+        active={day.active}
+        callback={onToggleLink(key, habitMeta.name, day.active)}
+        key={key}
+      ></Link>,
     );
   }
 
