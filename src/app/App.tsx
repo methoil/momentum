@@ -2,11 +2,33 @@ import React from 'react';
 import './App.css';
 import { HabitChain } from '../components/habit-chain';
 import habits from '../mock-data.json';
-import { useDispatch } from 'react-redux';
-import { IHabitCollection } from '../habits.model';
+import { useDispatch, useSelector } from 'react-redux';
+import { IHabitCollection, IHabitMeta } from '../habits.model';
+import { IState, loadDatesAction } from '../redux/reducer';
 
 function App() {
-  const timePeriods = [];
+  const timePeriods: JSX.Element[] = [];
+  const mockData = generateMockData();
+
+  const dispatch = useDispatch();
+  dispatch(loadDatesAction(mockData));
+  const habitMeta = useSelector((state: IState) => state.habitHistory);
+
+  // TODO: this will probably need to be an array to preserve the order
+  Object.entries(habitMeta).map((meta) => {
+    const chainComp = <HabitChain habitMeta={meta[1]} key={Math.random()}></HabitChain>;
+    timePeriods.push(chainComp);
+  });
+
+  return (
+    <div className="App">
+      <h1 className="App-header">Momentum</h1>
+      <div className="chains-container">{timePeriods}</div>
+    </div>
+  );
+}
+
+function generateMockData() {
   const habitMeta: IHabitCollection = {};
   for (let habit of habits) {
     const history = new Array(10)
@@ -18,22 +40,8 @@ function App() {
       name: habit.name,
       type: habit.type,
     };
-
-    const chainComp = (
-      <HabitChain habitMeta={habitMeta[habit.name]} key={Math.random()}></HabitChain>
-    );
-
-    timePeriods.push(chainComp);
   }
-
-  useDispatch();
-
-  return (
-    <div className="App">
-      <h1 className="App-header">Momentum</h1>
-      <div className="chains-container">{timePeriods}</div>
-    </div>
-  );
+  return habitMeta;
 }
 
 export default App;

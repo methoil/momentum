@@ -23,7 +23,7 @@ export const HabitChain: React.FC<IProps> = ({ habitMeta }) => {
     links.push(
       <Link
         active={day.active}
-        callback={onToggleLink(key, habitMeta.name, day.active)}
+        callback={onToggleLink(key, habitMeta.name, day)}
         key={key}
       ></Link>,
     );
@@ -31,7 +31,7 @@ export const HabitChain: React.FC<IProps> = ({ habitMeta }) => {
 
   return <div className="time-period-container">{links}</div>;
 
-  function onToggleLink(id: string, name: string, payload: boolean) {
+  function onToggleLink(id: string, name: string, payload: IHabitLink) {
     return () => dispatch(toggleLinkAction(id, name, payload));
   }
 };

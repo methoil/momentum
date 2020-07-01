@@ -3,7 +3,7 @@ import { IHabitMeta, IHabitCollection, IHabitLink } from '../habits.model';
 import { cloneDeep } from 'lodash';
 import { link } from 'fs';
 
-type IState = { habitHistory: IHabitCollection };
+export type IState = { habitHistory: IHabitCollection };
 
 interface ITodoAction {
   type: string;
