@@ -31,7 +31,11 @@ export const HabitChain: React.FC<IProps> = ({ habitMeta }) => {
 
   return <div className="time-period-container">{links}</div>;
 
-  function onToggleLink(id: string, name: string, payload: IHabitLink) {
+  function onToggleLink(id: string, name: string, linkData: IHabitLink) {
+    const payload = {
+      ...linkData,
+      active: !linkData.active,
+    }
     return () => dispatch(toggleLinkAction(id, name, payload));
   }
 };

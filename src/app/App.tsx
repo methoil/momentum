@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { HabitChain } from '../components/habit-chain';
 import habits from '../mock-data.json';
@@ -11,7 +11,10 @@ function App() {
   const mockData = generateMockData();
 
   const dispatch = useDispatch();
-  dispatch(loadDatesAction(mockData));
+  useEffect(() => {
+    dispatch(loadDatesAction(mockData));
+  }, []);
+
   const habitMeta = useSelector((state: IState) => state.habitHistory);
 
   // TODO: this will probably need to be an array to preserve the order

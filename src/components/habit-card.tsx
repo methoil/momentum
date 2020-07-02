@@ -12,7 +12,7 @@ export default function HabitCard(props: IProps) {
     <div className="habit-card">
       <div className="habit-card-text-item strong">{name}</div>
       <div className="habit-card-text-item">{type}</div>
-      <div className="habit-card-text-item">{history}</div>
+      {/* <div className="habit-card-text-item">{history}</div> */}
     </div>
   );
 }
