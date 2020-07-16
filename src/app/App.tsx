@@ -36,7 +36,7 @@ function generateMockData() {
   for (let habit of habits) {
     const history = new Array(10)
       .fill(null)
-      .map((entry) => ({ date: '', active: Math.random() * 2 > 1 }));
+      .map((entry, idx) => ({ date: idx, active: Math.random() * 2 > 1 }));
 
     habitMeta[habit.name] = {
       history,

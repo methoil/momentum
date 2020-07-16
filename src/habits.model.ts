@@ -8,6 +8,7 @@ export interface IHabitMeta {
   history: IHabitHistory;
 }
 
-export type IHabitLink = { date: string; active: boolean };
-
 export type IHabitHistory = IHabitLink[];
+
+// TODO: will need to represent date otherwise
+export type IHabitLink = { date: number; active: boolean };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { v4 as uuid } from 'uuid'; // TODO: option to allow implicit any ONLY for libraries?
+import { v4 as uuid } from 'uuid';
 
 // import "./habit-chain.scss";
 import Link from './link';
