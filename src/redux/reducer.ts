@@ -36,7 +36,7 @@ const reducer = (state: IState = defaultState, action: ITodoAction) => {
   switch (action.type) {
     case TOGGLE_DATE:
       const history = stateCopy.habitHistory[action.name].history;
-      const idx = history.findIndex((link) => link.date === action.payload.date);
+      const idx = history.findIndex((link) => link.date.toDateString() === action.payload.date.toDateString());
       history[idx].active = action.payload.active;
       return stateCopy;
     case LOAD_DATES:
