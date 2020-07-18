@@ -5,10 +5,12 @@ import habits from '../mock-data.json';
 import { useDispatch, useSelector } from 'react-redux';
 import { IHabitCollection, IHabitMeta } from '../habits.model';
 import { IState, loadDatesAction } from '../redux/reducer';
+import { TitleBar } from '../components/title-bar';
 
 function App() {
   const timePeriods: JSX.Element[] = [];
-  const mockData = generateMockData();
+  const dates = habits.map((habit, idx) => new Date(2020, 8, idx));
+  const mockData = generateMockData(dates);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -23,20 +25,25 @@ function App() {
     timePeriods.push(chainComp);
   });
 
+  
+
   return (
     <div className="App">
       <h1 className="App-header">Momentum</h1>
-      <div className="chains-container">{timePeriods}</div>
+      <div className="chains-container">
+        <TitleBar dates={dates}></TitleBar>
+        {timePeriods}
+      </div>
     </div>
   );
 }
 
-function generateMockData() {
+function generateMockData(dates: Date []) {
   const habitMeta: IHabitCollection = {};
   for (let habit of habits) {
     const history = new Array(10)
       .fill(null)
-      .map((entry, idx) => ({ date: new Date(2020, 8, idx), active: Math.random() * 2 > 1 }));
+      .map((entry, idx) => ({ date: dates[idx], active: Math.random() * 2 > 1 }));
 
     habitMeta[habit.name] = {
       history,
