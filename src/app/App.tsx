@@ -9,7 +9,7 @@ import { TitleBar } from '../components/title-bar';
 
 function App() {
   const timePeriods: JSX.Element[] = [];
-  const dates = habits.map((habit, idx) => new Date(2020, 8, idx));
+  const dates = habits[0].dates.map((date, idx) => new Date(2020, 8, idx));
   const mockData = generateMockData(dates);
 
   const dispatch = useDispatch();
