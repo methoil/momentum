@@ -5,11 +5,11 @@ import habits from '../mock-data.json';
 import { useDispatch, useSelector } from 'react-redux';
 import { IHabitCollection, IHabitMeta } from '../habits.model';
 import { IState, loadDatesAction } from '../redux/reducer';
-import { TitleBar } from '../components/title-bar';
+import { TitleBar } from '../components/dates-title-bar';
 
 function App() {
   const timePeriods: JSX.Element[] = [];
-  const dates = habits[0].dates.map((date, idx) => new Date(2020, 8, idx));
+  const dates = habits[0].dates.map((date, idx) => new Date(2020, 6, idx + 1));
   const mockData = generateMockData(dates);
 
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ function App() {
     <div className="App">
       <h1 className="App-header">Momentum</h1>
       <div className="chains-container">
-        <TitleBar dates={dates}></TitleBar>
+        <TitleBar history={dates}></TitleBar>
         {timePeriods}
       </div>
     </div>
