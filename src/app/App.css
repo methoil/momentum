@@ -49,3 +49,16 @@
   flex-direction: column;
     justify-content: space-around;
 }
+
+.dates-title-bar {
+  color: white;
+}
+
+/* todo - add vars for these to connect to habit-card + link .scss */
+.date-string-in-title {
+  width: 6rem;
+}
+
+.date-titlebar-left-label {
+  width: 11rem;
+}

@@ -7,11 +7,11 @@ interface IProps {
 
 export const TitleBar: React.FC<IProps> = ({dates}) => {
 
-    const nameElements = dates.map(date => (<div>{date.toDateString()}</div>));
+    const nameElements = dates.map(date => (<div className="date-string-in-title">{date.toDateString()}</div>));
 
     return (
-        <div className="time-period-container">
-            <div>Habits:</div>
+        <div className="time-period-container dates-title-bar">
+            <div className="date-titlebar-left-label">Habits:</div>
             {nameElements}
         </div>
         );
