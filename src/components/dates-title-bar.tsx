@@ -4,7 +4,7 @@ import "../app/App.css";
 interface IProps {
   history: Date[];
 }
-const MAX_HISTORY = 365;
+const MAX_HISTORY = 10;
 
 export const TitleBar: React.FC<IProps> = ({ history }) => {
   const today = new Date().toDateString();
@@ -14,16 +14,16 @@ export const TitleBar: React.FC<IProps> = ({ history }) => {
   const dates: string[] = [];
   var date = new Date();
 
-  // add a day
-  date.setDate(date.getDate() + 1);
-
-  let count = 0;
-  while (count < history.length || count < MAX_HISTORY) {
+  let historyCount = 0;
+  let totalCount = 0;
+  while (historyCount < history.length && totalCount < MAX_HISTORY) {
     const currDateStr = date.toDateString();
-    if (history[count].toDateString() === currDateStr) {
-      count++;
+    if (history[historyCount].toDateString() === currDateStr) {
+      historyCount++;
     }
     dates.push(currDateStr);
+    date.setDate(date.getDate() - 1);
+    totalCount++;
   }
 
   const nameElements = dates.map((date) => (
