@@ -1,10 +1,10 @@
 import React from "react";
-import "../app/App.css";
+import "./dates-title-bar.scss";
 
 interface IProps {
   history: Date[];
 }
-const MAX_HISTORY = 10;
+const MAX_HISTORY = 30;
 
 export const TitleBar: React.FC<IProps> = ({ history }) => {
   const today = new Date().toDateString();
