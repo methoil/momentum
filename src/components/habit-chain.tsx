@@ -18,6 +18,9 @@ export const HabitChain: React.FC<IProps> = ({ habitMeta }) => {
   // for mock, started 10 days ago
   links.push(<HabitCard habitMeta={habitMeta} key={Math.random()}></HabitCard>);
 
+
+
+
   for (let day of habitMeta.history) {
     const key = uuid();
     links.push(
