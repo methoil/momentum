@@ -21,11 +21,16 @@ function App() {
   }, []);
 
   const habitMeta = useSelector((state: IState) => state.habitHistory);
+  const dateLabels = generateDisplayedDates(dates);
 
   // TODO: this will probably need to be an array to preserve the order
   Object.entries(habitMeta).map((meta) => {
     const chainComp = (
-      <HabitChain habitMeta={meta[1]} key={Math.random()}></HabitChain>
+      <HabitChain
+        habitMeta={meta[1]}
+        dateLabels={dateLabels}
+        key={Math.random()}
+      ></HabitChain>
     );
     timePeriods.push(chainComp);
   });
@@ -34,7 +39,7 @@ function App() {
     <div className="App">
       <h1 className="App-header">Momentum</h1>
       <div className="chains-container">
-        <TitleBar dates={generateDisplayedDates(dates)}></TitleBar>
+        <TitleBar dates={dateLabels}></TitleBar>
         {timePeriods}
       </div>
     </div>
@@ -67,12 +72,10 @@ function generateDisplayedDates(dates: Date[]): string[] {
 function generateMockData(dates: Date[]) {
   const habitMeta: IHabitCollection = {};
   for (let habit of habits) {
-    const history = new Array(10)
-      .fill(null)
-      .map((entry, idx) => ({
-        date: dates[idx],
-        active: Math.random() * 2 > 1,
-      }));
+    const history = new Array(10).fill(null).map((entry, idx) => ({
+      date: dates[idx],
+      active: Math.random() * 2 > 1,
+    }));
 
     habitMeta[habit.name] = {
       history,
