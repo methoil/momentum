@@ -34,7 +34,7 @@ export const HabitChain: React.FC<IProps> = ({ habitMeta, dateLabels }) => {
     links.push(
       <Link
         active={day?.active || false}
-        callback={onToggleLink(key, habitMeta.name, day)}
+        updatePromise={onToggleLink(key, habitMeta.name, day)}
         key={key}
       ></Link>
     );
@@ -42,11 +42,25 @@ export const HabitChain: React.FC<IProps> = ({ habitMeta, dateLabels }) => {
 
   return <div className="time-period-container">{links}</div>;
 
-  function onToggleLink(id: string, name: string, linkData: IHabitLink) {
+  async function onToggleLink(id: string, name: string, linkData: IHabitLink) {
+    const SERVICE_URL = "localhost:8001";
     const payload = {
       ...linkData,
       active: !linkData.active,
     };
-    return () => dispatch(toggleLinkAction(id, name, payload));
+
+    const req = {
+      method: "POST",
+      body: JSON.stringify(linkData),
+    };
+
+    try {
+      await fetch(SERVICE_URL, req);
+      return dispatch(toggleLinkAction(id, name, payload));
+    } catch (err) {
+      // todo: add logging
+      console.error(err);
+      return err;
+    }
   }
 };

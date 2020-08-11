@@ -3,7 +3,7 @@ import "./link.scss";
 
 interface ILinkProps {
   active: boolean;
-  callback: () => void;
+  updatePromise: Promise<() => any>;
 }
 
 export default function Link(props: ILinkProps) {
@@ -20,9 +20,9 @@ export default function Link(props: ILinkProps) {
     return "link-circle " + (active ? "on" : "off");
   }
 
-  function toggleStatus(event: React.MouseEvent) {
+  async function toggleStatus(event: React.MouseEvent) {
     // TODO: set this in store
     // setActive(!active);
-    props.callback();
+    return await props.updatePromise;
   }
 }
