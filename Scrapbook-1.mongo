@@ -1,0 +1,4 @@
+db.habit_history.insertOne({
+    "date": "2020-08-13T03:17:38.116Z",
+    "active": true
+});
