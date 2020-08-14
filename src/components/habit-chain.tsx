@@ -38,6 +38,10 @@ export const HabitChain: React.FC<IProps> = ({ habitMeta, dateLabels }) => {
         key={key}
       ></Link>
     );
+
+    if (day.active && habitMeta.history[i + 1]?.active) {
+      links.push(<div className="active-link-connector"></div>);
+    }
   }
 
   return <div className="time-period-container">{links}</div>;
