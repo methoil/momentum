@@ -7,13 +7,17 @@ import { IHabitCollection, IHabitMeta } from "../habits.model";
 import { IState, loadDatesAction } from "../redux/reducer";
 import { TitleBar } from "../components/dates-title-bar";
 
-function App() {
+async function App() {
   const timePeriods: JSX.Element[] = [];
+  
+  // TODO: login here
+  const bearerToken = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjllMTc3ODIzM2Y1NTU4YzgxMTg5MDYiLCJpYXQiOjE2MDQxOTYyMTd9.4TNDCHjTOkEGMeAIHZbx68EcSa4muqxW1M3wcPY_PTY';
 
-  // This is what gets passed into generateDisplayedDates
-  // TODO: keep them connected - this is confusing AF as is
-  const dates = habits[0].dates.map((date, idx) => new Date(2020, 6, idx + 1));
-  const mockData = generateMockData(dates);
+  const habitData = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits` || '',  {
+    headers: {Authorization: bearerToken},
+  });
+
+
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -44,46 +48,6 @@ function App() {
       </div>
     </div>
   );
-}
-
-function generateDisplayedDates(dates: Date[]): string[] {
-  const MAX_HISTORY = 30;
-  const today = new Date().toDateString();
-  // We can expect the date info to come it sorted - as I will be passing it in
-  // we could even sort it here but it's not an efficient place to do it, eso with larger data
-  const dateStrings: string[] = [];
-  var date = new Date();
-  let historyCount = 0;
-  let totalCount = 0;
-
-  while (historyCount < dates.length && totalCount < MAX_HISTORY) {
-    const currDateStr = date.toDateString();
-    if (dates[historyCount].toDateString() === currDateStr) {
-      historyCount++;
-    }
-    dateStrings.push(currDateStr);
-    date.setDate(date.getDate() - 1);
-    totalCount++;
-  }
-
-  return dateStrings;
-}
-
-function generateMockData(dates: Date[]) {
-  const habitMeta: IHabitCollection = {};
-  for (let habit of habits) {
-    const history = new Array(10).fill(null).map((entry, idx) => ({
-      date: dates[idx],
-      active: Math.random() * 2 > 1,
-    }));
-
-    habitMeta[habit.name] = {
-      history,
-      name: habit.name,
-      type: habit.type,
-    };
-  }
-  return habitMeta;
 }
 
 export default App;

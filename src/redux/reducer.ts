@@ -2,6 +2,7 @@ import { createStore } from 'redux';
 import { IHabitMeta, IHabitCollection, IHabitLink } from '../habits.model';
 import { cloneDeep } from 'lodash';
 import { link } from 'fs';
+import { toDateStr } from '../app/services/date-utils';
 
 export type IState = { habitHistory: IHabitCollection };
 
@@ -34,7 +35,7 @@ const reducer = (state: IState = defaultState, action: ITodoAction) => {
   switch (action.type) {
     case TOGGLE_DATE:
       const history = stateCopy.habitHistory[action.name].history;
-      const idx = history.findIndex((link) => link.date.toDateString() === action.payload.date.toDateString());
+      const idx = history.findIndex((link) => toDateStr(link.date) === toDateStr(action.payload.date));
       history[idx].active = action.payload.active;
       return stateCopy;
     case LOAD_DATES:
