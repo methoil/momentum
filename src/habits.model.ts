@@ -6,11 +6,12 @@ export interface IHabitCollection {
 
 export interface IHabitMeta {
   name: string;
-  type: string;
-  history: IHabitHistory;
+  _id: string;
+  history: IDateHistory;
+  type?: string;
 }
 
-export type IHabitHistory = IHabitLink[];
+export type IDateHistory = DateStr[];
 
 // TODO: will need to represent date otherwise
 export type IHabitLink = { date: DateStr; active: boolean };
