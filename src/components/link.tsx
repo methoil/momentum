@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./link.scss";
+import "./css/link.scss";
 
 interface ILinkProps {
   active: boolean;

@@ -1,5 +1,5 @@
 import React from "react";
-import "./habit-card.scss";
+import "./css/habit-card.scss";
 import { IHabitMeta } from "../habits.model";
 
 interface IProps {

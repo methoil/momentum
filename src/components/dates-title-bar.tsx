@@ -1,5 +1,5 @@
 import React from "react";
-import "./dates-title-bar.scss";
+import "./css/dates-title-bar.scss";
 
 interface IProps {
   dates: string [];
