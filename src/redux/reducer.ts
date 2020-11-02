@@ -7,7 +7,6 @@ export type IState = { habitHistory: IHabitCollection };
 
 interface ITodoAction {
   type: string;
-  id: string;
   name: string;
   payload: IHabitLink;
 }
@@ -15,9 +14,8 @@ interface ITodoAction {
 const TOGGLE_DATE = 'TOGGLE_DATE';
 const LOAD_DATES = 'LOAD_DATES';
 
-export const toggleLinkAction = (id: string, name: string, payload: IHabitLink): ITodoAction => ({
+export const toggleLinkAction = (name: string, payload: IHabitLink): ITodoAction => ({
   type: TOGGLE_DATE,
-  id,
   name,
   payload,
 });

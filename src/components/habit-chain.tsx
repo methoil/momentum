@@ -51,6 +51,6 @@ export const HabitChain: React.FC<IProps> = ({ habitMeta, dateLabels }) => {
       ...linkData,
       active: !linkData.active,
     };
-    return () => dispatch(toggleLinkAction(id, name, payload));
+    return () => dispatch(toggleLinkAction(name, payload));
   }
 };
