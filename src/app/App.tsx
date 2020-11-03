@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IDateHistory, IHabitCollection, IHabitMeta } from "../habits.model";
 import { IState, loadDatesAction } from "../redux/reducer";
 import { TitleBar } from "../components/dates-title-bar";
-import { toDateStr } from "./services/date-utils";
+import { DateStr, toDateStr } from "./services/date-utils";
 
 async function App() {
   const timePeriods: JSX.Element[] = [];
@@ -35,7 +35,7 @@ async function App() {
   }, []);
 
   const habitMeta = useSelector((state: IState) => state.habitHistory);
-  const dateLabels = generateDisplayedDates(dates);
+  const dateLabels = generateDisplayedDates(30);
 
   // TODO: this will probably need to be an array to preserve the order
   Object.entries(habitMeta).map((meta) => {
@@ -58,6 +58,16 @@ async function App() {
       </div>
     </div>
   );
+}
+
+function generateDisplayedDates(daysBack: number): DateStr[] {
+  const labels: DateStr[] = [];
+  const date = new Date();
+  for (let i = 0; i < daysBack; i++) {
+    labels.push(toDateStr(date));
+    date.setDate(date.getDate() - 1);
+  }
+  return labels;
 }
 
 export default App;

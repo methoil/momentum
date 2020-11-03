@@ -7,9 +7,10 @@ import Link from "./link";
 import HabitCard from "./habit-card";
 import { IHabitMeta, IHabitLink } from "../habits.model";
 import { toggleLinkAction } from "../redux/reducer";
+import { DateStr } from "../app/services/date-utils";
 
 interface IProps {
-  dateLabels: string[];
+  dateLabels: DateStr[];
   habitMeta: IHabitMeta;
 }
 
@@ -20,15 +21,13 @@ export const HabitChain: React.FC<IProps> = ({ habitMeta, dateLabels }) => {
   links.push(<HabitCard habitMeta={habitMeta} key={Math.random()}></HabitCard>);
 
   for (let i = 0; i < dateLabels.length; i++) {
-    let day;
-    if (i < habitMeta.history.length) {
-      day = habitMeta.history[i]; // will need to match differently???
-    } else {
-      day = {
-        active: false,
-        date: new Date(dateLabels[i]),
-      };
+    const day = {
+      date: dateLabels[i],
+      active: false,
     }
+    if (habitMeta.history.includes(day.date)) {
+      day.active = true;
+    } 
 
     const key = uuid();
     links.push(
@@ -39,9 +38,10 @@ export const HabitChain: React.FC<IProps> = ({ habitMeta, dateLabels }) => {
       ></Link>
     );
 
-    if (day.active && habitMeta.history[i + 1]?.active) {
-      links.push(<div className="active-link-connector"></div>);
-    }
+    // TODO: fix this...
+    // if (day.active && habitMeta.history[i + 1]?.active) {
+    //   links.push(<div className="active-link-connector"></div>);
+    // }
   }
 
   return <div className="time-period-container">{links}</div>;
