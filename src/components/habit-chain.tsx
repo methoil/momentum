@@ -1,56 +1,58 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuid } from "uuid";
 
 // import "./habit-chain.scss";
 import Link from "./link";
 import HabitCard from "./habit-card";
 import { IHabitMeta, IHabitLink } from "../habits.model";
-import { toggleLinkAction } from "../redux/reducer";
+import { IState, toggleLinkAction } from "../redux/reducer";
 import { DateStr } from "../app/services/date-utils";
 
 interface IProps {
-  dateLabels: DateStr[];
-  habitMeta: IHabitMeta;
+  habitId: string;
 }
 
-export const HabitChain: React.FC<IProps> = ({ habitMeta, dateLabels }) => {
+export const HabitChain: React.FC<IProps> = ({ habitId }) => {
   const dispatch = useDispatch();
-  const links = [];
+
+  
+  const habitMeta = useSelector((state: IState) => state.habitHistory.find((habit => habit._id === habitId)));
+  if (!habitMeta) return (<div></div>);
+  
+  const combined = habitMeta?.history;
+
+
+
+
+   const links = [];
   // for mock, started 10 days ago
-  links.push(<HabitCard habitMeta={habitMeta} key={Math.random()}></HabitCard>);
+  links.push(<HabitCard name={habitMeta.name} key={Math.random()}></HabitCard>);
 
-  for (let i = 0; i < dateLabels.length; i++) {
-    const day = {
-      date: dateLabels[i],
-      active: false,
-    }
-    if (habitMeta.history.includes(day.date)) {
-      day.active = true;
-    } 
-
-    const key = uuid();
+ 
+  for (let i = 0; i < combined.length; i++) {
     links.push(
       <Link
-        active={day?.active || false}
-        callback={onToggleLink(key, habitMeta.name, day)}
-        key={key}
+        active={combined[i]}
+        callback={onToggleLink(habitMeta._id, i)}
+        key={habitMeta._id}
       ></Link>
     );
+    if (combined[i] && combined?.[i+1]) {
+      links.push(<div className="active-link-connector"></div>);
 
-    // TODO: fix this...
-    // if (day.active && habitMeta.history[i + 1]?.active) {
-    //   links.push(<div className="active-link-connector"></div>);
-    // }
+    }
   }
 
+  
   return <div className="time-period-container">{links}</div>;
 
-  function onToggleLink(id: string, name: string, linkData: IHabitLink) {
+  function onToggleLink(id: string, index: number,) {
+    combined[index] = !combined[index];
     const payload = {
-      ...linkData,
-      active: !linkData.active,
+      index, id,
+      active: combined[index],
     };
-    return () => dispatch(toggleLinkAction(name, payload));
+    return () => dispatch(toggleLinkAction(payload));
   }
 };
