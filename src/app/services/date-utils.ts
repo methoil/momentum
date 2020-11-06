@@ -3,7 +3,9 @@ export function toDateStr(date: Date | string) : DateStr {
         if (checkValidDateStr(date)) return date;
         else throw new Error(`Invalid date string : ${date}`);
     } else {
-        const dateString = date.toDateString();
+        // TODO: probably want to include the day here
+        // const dateString = date.toDateString();
+        const dateString = date.toISOString().split('T')[0];
         if (checkValidDateStr(dateString)) return dateString;
     }
     throw new Error(`Invalid date string : ${date}`);

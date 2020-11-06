@@ -16,41 +16,44 @@ interface IProps {
 export const HabitChain: React.FC<IProps> = ({ habitId }) => {
   const dispatch = useDispatch();
 
-  
-  const habitMeta = useSelector((state: IState) => state.habitHistory.find((habit => habit._id === habitId)));
-  if (!habitMeta) return (<div></div>);
-  
+  const habitMeta = useSelector((state: IState) =>
+    state.habitHistory.find((habit) => habit._id === habitId)
+  );
+  const displayedDates = useSelector((state: IState) => state.displayedDates);
+  if (!habitMeta) return <div></div>;
+
   const combined = habitMeta?.history;
 
-
-
-
-   const links = [];
+  const links = [];
   // for mock, started 10 days ago
-  links.push(<HabitCard name={habitMeta.name} key={Math.random()}></HabitCard>);
+  links.push(<HabitCard name={habitMeta.name} key={habitMeta._id}></HabitCard>);
 
- 
   for (let i = 0; i < combined.length; i++) {
     links.push(
       <Link
         active={combined[i]}
         callback={onToggleLink(habitMeta._id, i)}
-        key={habitMeta._id}
+        date={displayedDates[i]}
+        key={`${habitMeta._id}-${displayedDates[i]}`}
       ></Link>
     );
-    if (combined[i] && combined?.[i+1]) {
-      links.push(<div className="active-link-connector"></div>);
-
+    if (combined[i] && combined?.[i + 1]) {
+      links.push(
+        <div
+          className="active-link-connector"
+          key={`${displayedDates[i]}-link}`}
+        ></div>
+      );
     }
   }
 
-  
   return <div className="time-period-container">{links}</div>;
 
-  function onToggleLink(id: string, index: number,) {
+  function onToggleLink(id: string, index: number) {
     combined[index] = !combined[index];
     const payload = {
-      index, id,
+      index,
+      id,
       active: combined[index],
     };
     return () => dispatch(toggleLinkAction(payload));

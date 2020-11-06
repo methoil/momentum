@@ -8,7 +8,7 @@ import { HabitModel, IState, loadDatesAction } from "../redux/reducer";
 import { TitleBar } from "../components/dates-title-bar";
 import { DateStr, toDateStr } from "./services/date-utils";
 
-async function App() {
+function App() {
   const timePeriods: JSX.Element[] = [];
 
   // TODO: login here
@@ -19,8 +19,8 @@ async function App() {
   // });
 const displayedDates = generateDisplayedDates(30);
   const habitHistory: HabitModel[] = mockData.map((habit) => {
-    const { name, history, _id } = habit;
-    
+    const { name, _id } = habit;
+    const history = habit.history[0].split(',').reverse();
 
 
     let habitDateIdx = 0;

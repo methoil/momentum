@@ -56,10 +56,12 @@ const reducer = (state: IState = defaultState, action: IHabitStoreAction) => {
   switch (action.type) {
     case TOGGLE_DATE:
       const {id, index} = action.payload;
-      const habitModel = state.habitHistory.find(model => model._id === id);
+      const habitIdx = state.habitHistory.findIndex(model => model._id === id);
 
-      if (habitModel) {
-        habitModel.history[index] = !habitModel.history[index];
+      if (habitIdx > -1) {
+        const newHabit = Object.assign({}, state.habitHistory[habitIdx]);        
+        newHabit.history[index] = !newHabit.history[index];
+        state.habitHistory[habitIdx] = newHabit;
       }
 
 
