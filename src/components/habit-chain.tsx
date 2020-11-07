@@ -50,11 +50,10 @@ export const HabitChain: React.FC<IProps> = ({ habitId }) => {
   return <div className="time-period-container">{links}</div>;
 
   function onToggleLink(id: string, index: number) {
-    combined[index] = !combined[index];
     const payload = {
       index,
       id,
-      active: combined[index],
+      active: !combined[index],
     };
     return () => dispatch(toggleLinkAction(payload));
   }

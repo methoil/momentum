@@ -46,11 +46,11 @@ const displayedDates = generateDisplayedDates(30);
     dispatch(loadDatesAction(loadAppPayload));
   }, []);
 
-  const habitMeta = useSelector((state: IState) => state.habitHistory);
+  // const habitMeta = useSelector((state: IState) => state.habitHistory);
  
 
   // TODO: this will probably need to be an array to preserve the order
-  habitMeta.map((meta) => {
+  habitHistory.map((meta) => {
     const chainComp = (
       <HabitChain
         habitId={meta._id}
