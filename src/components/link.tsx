@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { DateStr } from "../app/services/date-utils";
 import "./css/link.scss";
 
 interface ILinkProps {
   active: boolean;
+  date: DateStr;
   callback: () => void;
 }
 
@@ -17,7 +19,7 @@ export default function Link(props: ILinkProps) {
   return <div className={getClass(active)} onClick={toggleStatus}></div>;
 
   function getClass(active: boolean): string {
-    return "link-circle " + (active ? "on" : "off");
+    return "link-circle " + (active ? "on" : "off") + ' ' + props.date;
   }
 
   function toggleStatus(event: React.MouseEvent) {

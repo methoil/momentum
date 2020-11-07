@@ -1,14 +1,17 @@
+import { DateStr } from "./app/services/date-utils";
+
 export interface IHabitCollection {
   [key: string]: IHabitMeta;
 }
 
 export interface IHabitMeta {
   name: string;
-  type: string;
-  history: IHabitHistory;
+  _id: string;
+  history: IDateHistory;
+  type?: string;
 }
 
-export type IHabitHistory = IHabitLink[];
+export type IDateHistory = DateStr[];
 
 // TODO: will need to represent date otherwise
-export type IHabitLink = { date: Date; active: boolean };
+export type IHabitLink = { date: DateStr; active: boolean };

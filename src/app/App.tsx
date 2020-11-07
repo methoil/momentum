@@ -1,34 +1,59 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import { HabitChain } from "../components/habit-chain";
-import habits from "../mock-data.json";
+import mockData from "../mock-data.json";
 import { useDispatch, useSelector } from "react-redux";
-import { IHabitCollection, IHabitMeta } from "../habits.model";
-import { IState, loadDatesAction } from "../redux/reducer";
+import { IDateHistory, IHabitCollection, IHabitMeta } from "../habits.model";
+import { HabitModel, IState, loadDatesAction } from "../redux/reducer";
 import { TitleBar } from "../components/dates-title-bar";
+import { DateStr, toDateStr } from "./services/date-utils";
 
 function App() {
   const timePeriods: JSX.Element[] = [];
 
-  // This is what gets passed into generateDisplayedDates
-  // TODO: keep them connected - this is confusing AF as is
-  const dates = habits[0].dates.map((date, idx) => new Date(2020, 6, idx + 1));
-  const mockData = generateMockData(dates);
+  // TODO: login here
+  // const bearerToken = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjllMTc3ODIzM2Y1NTU4YzgxMTg5MDYiLCJpYXQiOjE2MDQxOTYyMTd9.4TNDCHjTOkEGMeAIHZbx68EcSa4muqxW1M3wcPY_PTY';
+
+  // const habitData = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits` || '',  {
+  //   headers: {Authorization: bearerToken},
+  // });
+const displayedDates = generateDisplayedDates(30);
+  const habitHistory: HabitModel[] = mockData.map((habit) => {
+    const { name, _id } = habit;
+    const history = habit.history[0].split(',').reverse();
+
+
+    let habitDateIdx = 0;
+    const combined = new Array(displayedDates.length);
+    for (let i = 0; i < displayedDates.length; i++) {
+      if (displayedDates[i] === history[habitDateIdx]) {
+        combined[i] = true;
+        habitDateIdx++;
+      } else {
+        combined[i] = false;
+      }
+    }
+    return { name, _id, history: combined };
+  });
+  const loadAppPayload = {
+    ownerId: mockData?.[0]?.owner || "",
+    displayedDates,
+    habitHistory,
+  };
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadDatesAction(mockData));
+    dispatch(loadDatesAction(loadAppPayload));
   }, []);
 
-  const habitMeta = useSelector((state: IState) => state.habitHistory);
-  const dateLabels = generateDisplayedDates(dates);
+  // const habitMeta = useSelector((state: IState) => state.habitHistory);
+ 
 
   // TODO: this will probably need to be an array to preserve the order
-  Object.entries(habitMeta).map((meta) => {
+  habitHistory.map((meta) => {
     const chainComp = (
       <HabitChain
-        habitMeta={meta[1]}
-        dateLabels={dateLabels}
+        habitId={meta._id}
         key={Math.random()}
       ></HabitChain>
     );
@@ -39,51 +64,21 @@ function App() {
     <div className="App">
       <h1 className="App-header">Momentum</h1>
       <div className="chains-container">
-        <TitleBar dates={dateLabels}></TitleBar>
+        <TitleBar dates={displayedDates}></TitleBar>
         {timePeriods}
       </div>
     </div>
   );
 }
 
-function generateDisplayedDates(dates: Date[]): string[] {
-  const MAX_HISTORY = 30;
-  const today = new Date().toDateString();
-  // We can expect the date info to come it sorted - as I will be passing it in
-  // we could even sort it here but it's not an efficient place to do it, eso with larger data
-  const dateStrings: string[] = [];
-  var date = new Date();
-  let historyCount = 0;
-  let totalCount = 0;
-
-  while (historyCount < dates.length && totalCount < MAX_HISTORY) {
-    const currDateStr = date.toDateString();
-    if (dates[historyCount].toDateString() === currDateStr) {
-      historyCount++;
-    }
-    dateStrings.push(currDateStr);
+function generateDisplayedDates(daysBack: number): DateStr[] {
+  const labels: DateStr[] = [];
+  const date = new Date();
+  for (let i = 0; i < daysBack; i++) {
+    labels.push(toDateStr(date));
     date.setDate(date.getDate() - 1);
-    totalCount++;
   }
-
-  return dateStrings;
-}
-
-function generateMockData(dates: Date[]) {
-  const habitMeta: IHabitCollection = {};
-  for (let habit of habits) {
-    const history = new Array(10).fill(null).map((entry, idx) => ({
-      date: dates[idx],
-      active: Math.random() * 2 > 1,
-    }));
-
-    habitMeta[habit.name] = {
-      history,
-      name: habit.name,
-      type: habit.type,
-    };
-  }
-  return habitMeta;
+  return labels;
 }
 
 export default App;

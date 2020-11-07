@@ -9,7 +9,7 @@ interface IProps {
 export const TitleBar: React.FC<IProps> = ({ dates }) => {
 
   const nameElements = dates.map((date) => (
-    <div className="date-string-in-title">{date}</div>
+    <div className="date-string-in-title" key={date}>{date}</div>
   ));
 
   return (
