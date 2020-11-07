@@ -6,7 +6,8 @@ import { v4 as uuid } from "uuid";
 import Link from "./link";
 import HabitCard from "./habit-card";
 import { IHabitMeta, IHabitLink } from "../habits.model";
-import { IState, toggleLinkAction } from "../redux/reducer";
+import { IState } from "../redux/reducer";
+import { ToggleLinkAction } from "../redux/actions";
 import { DateStr } from "../app/services/date-utils";
 
 interface IProps {
@@ -55,6 +56,6 @@ export const HabitChain: React.FC<IProps> = ({ habitId }) => {
       id,
       active: !combined[index],
     };
-    return () => dispatch(toggleLinkAction(payload));
+    return () => dispatch(ToggleLinkAction(payload));
   }
 };

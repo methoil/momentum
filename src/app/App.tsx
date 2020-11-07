@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { HabitChain } from "../components/habit-chain";
 import mockData from "../mock-data.json";
-import { useDispatch, useSelector } from "react-redux";
-import { IDateHistory, IHabitCollection, IHabitMeta } from "../habits.model";
-import { HabitModel, IState, loadDatesAction } from "../redux/reducer";
+import { useDispatch, } from "react-redux";
+import { HabitModel } from "../redux/reducer";
+import { LoadDatesAction } from "../redux/actions";
 import { TitleBar } from "../components/dates-title-bar";
 import { DateStr, toDateStr } from "./services/date-utils";
 
@@ -43,7 +43,7 @@ const displayedDates = generateDisplayedDates(30);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadDatesAction(loadAppPayload));
+    dispatch(LoadDatesAction(loadAppPayload));
   }, []);
 
   // const habitMeta = useSelector((state: IState) => state.habitHistory);
