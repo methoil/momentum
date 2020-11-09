@@ -32,7 +32,6 @@ export const reducer = (state: IState = defaultState, action: IAction) => {
 
       if (habitIdx > -1) {
         const newHabit = Object.assign({}, state.habitHistory[habitIdx]);
-        newHabit.history = [...newHabit.history];
         newHabit.history[index] = !newHabit.history[index];
         state.habitHistory[habitIdx] = newHabit;
       }
