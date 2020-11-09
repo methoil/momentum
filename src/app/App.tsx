@@ -1,74 +1,19 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { HabitChain } from "../components/habit-chain";
+import HabitGrid from "../components/habit-grid";
 import mockData from "../mock-data.json";
-import { useDispatch, } from "react-redux";
-import { HabitModel } from "../redux/reducer";
-import { LoadDatesAction } from "../redux/actions";
-import { TitleBar } from "../components/dates-title-bar";
+import { useDispatch, useSelector } from "react-redux";
+import { HabitModel, IState } from "../redux/reducer";
+import { LoadDatesAction, loadDatesFromServer } from "../redux/actions";
 import { DateStr, toDateStr } from "./services/date-utils";
 
 function App() {
-  const timePeriods: JSX.Element[] = [];
-
   // TODO: login here
-  // const bearerToken = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjllMTc3ODIzM2Y1NTU4YzgxMTg5MDYiLCJpYXQiOjE2MDQxOTYyMTd9.4TNDCHjTOkEGMeAIHZbx68EcSa4muqxW1M3wcPY_PTY';
-
-  // const habitData = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits` || '',  {
-  //   headers: {Authorization: bearerToken},
-  // });
-const displayedDates = generateDisplayedDates(30);
-  const habitHistory: HabitModel[] = mockData.map((habit) => {
-    const { name, _id } = habit;
-    const history = habit.history[0].split(',').reverse();
-
-
-    let habitDateIdx = 0;
-    const combined = new Array(displayedDates.length);
-    for (let i = 0; i < displayedDates.length; i++) {
-      if (displayedDates[i] === history[habitDateIdx]) {
-        combined[i] = true;
-        habitDateIdx++;
-      } else {
-        combined[i] = false;
-      }
-    }
-    return { name, _id, history: combined };
-  });
-  const loadAppPayload = {
-    ownerId: mockData?.[0]?.owner || "",
-    displayedDates,
-    habitHistory,
-  };
-
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(LoadDatesAction(loadAppPayload));
-  }, []);
+  const displayedDates = generateDisplayedDates(30);  
+  dispatch(loadDatesFromServer(displayedDates));
 
-  // const habitMeta = useSelector((state: IState) => state.habitHistory);
- 
-
-  // TODO: this will probably need to be an array to preserve the order
-  habitHistory.map((meta) => {
-    const chainComp = (
-      <HabitChain
-        habitId={meta._id}
-        key={Math.random()}
-      ></HabitChain>
-    );
-    timePeriods.push(chainComp);
-  });
-
-  return (
-    <div className="App">
-      <h1 className="App-header">Momentum</h1>
-      <div className="chains-container">
-        <TitleBar dates={displayedDates}></TitleBar>
-        {timePeriods}
-      </div>
-    </div>
-  );
+  return <HabitGrid></HabitGrid>;
 }
 
 function generateDisplayedDates(daysBack: number): DateStr[] {

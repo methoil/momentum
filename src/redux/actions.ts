@@ -1,7 +1,9 @@
+import { Action } from "redux";
+import { ThunkAction } from "redux-thunk";
 import { DateStr } from "../app/services/date-utils";
 import { IServerHabitData } from "../habits.model";
 import { AppEvents } from "./events";
-import { HabitModel } from "./reducer";
+import { HabitModel, IState } from "./reducer";
 
 export const makeAction = <T extends AppEvents, P>(type: T) => (payload: P) => {
   return {
@@ -26,21 +28,35 @@ interface ILoadHabitsPayload {
   habitHistory: HabitModel[];
 }
 
-export const loadDatesFromServer = (displayedDates: DateStr[]) => {
+interface IHabitOnServer {
+  history: string[];
+  _id: string;
+  name: string;
+  owner: string;
+}
+
+type IServerResponse = IHabitOnServer[];
+
+export const loadDatesFromServer = (
+  displayedDates: DateStr[]
+): ThunkAction<void, IState, unknown, Action<string>> => {
   // TODO: generate this properly
   const bearerToken =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjllMTc3ODIzM2Y1NTU4YzgxMTg5MDYiLCJpYXQiOjE2MDQxOTYyMTd9.4TNDCHjTOkEGMeAIHZbx68EcSa4muqxW1M3wcPY_PTY";
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk3OTkyNTU0ZDYyMzUzNjg5YjVkMGEiLCJpYXQiOjE2MDQ4OTU4ODd9.iwCsbLn1fOvGRqLF0m2EVOpWWs_89G2uWa3GFlVwQuc";
 
   return async function (dispatch) {
-    const serverData = await fetch(
-      `${process.env.REACT_APP_SERVER_URL}/habits`,
-      {
-        headers: { Authorization: bearerToken },
-      }
-    );
+    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits`, {
+      headers: { Authorization: bearerToken },
+    });
+    const serverData: any = await res.json();
+    const habitHistory = transtlateDatesToView(serverData, displayedDates);
 
-    const storeData = transtlateDatesToView(serverData, displayedDates);
-
+    const loadAppPayload = {
+      ownerId: "5f97992554d62353689b5d0a",
+      displayedDates,
+      habitHistory,
+    };
+    dispatch(LoadDatesAction(loadAppPayload));
   };
 };
 
