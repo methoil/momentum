@@ -5,16 +5,18 @@ import { v4 as uuid } from "uuid";
 // import "./habit-chain.scss";
 import Link from "./link";
 import HabitCard from "./habit-card";
-import { IHabitMeta, IHabitLink } from "../habits.model";
 import { IState } from "../redux/reducer";
 import { ToggleLinkAction } from "../redux/actions";
-import { DateStr } from "../app/services/date-utils";
 
 interface IProps {
   habitId: string;
+  throttledSaveDates: () => void;
 }
 
-export const HabitChain: React.FC<IProps> = ({ habitId }) => {
+export const HabitChain: React.FC<IProps> = ({
+  habitId,
+  throttledSaveDates,
+}) => {
   const dispatch = useDispatch();
 
   const habitMeta = useSelector((state: IState) =>
@@ -56,6 +58,9 @@ export const HabitChain: React.FC<IProps> = ({ habitId }) => {
       id,
       active: !combined[index],
     };
-    return () => dispatch(ToggleLinkAction(payload));
+    return () => {
+      throttledSaveDates();
+      dispatch(ToggleLinkAction(payload));
+    };
   }
 };

@@ -1,3 +1,4 @@
+import { throttle } from "../services/utils";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { saveDatesToServer } from "../redux/actions";
@@ -12,13 +13,14 @@ export default function HabitGrid() {
     (habit) => habit._id
   );
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const throttledSaveDates = throttle(() => dispatch(saveDatesToServer()), 5000);
 
   const displayedDates = useSelector((state: IState) => state.displayedDates);
   const timePeriods: JSX.Element[] = [];
 
   habitIds.map((id) => {
-    const chainComp = <HabitChain habitId={id} key={id}></HabitChain>;
+    const chainComp = <HabitChain habitId={id} key={id} throttledSaveDates={throttledSaveDates}></HabitChain>;
     timePeriods.push(chainComp);
   });
 

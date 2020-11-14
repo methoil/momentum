@@ -1,9 +1,11 @@
 import { Action } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { DateStr } from "../app/services/date-utils";
+import { DateStr } from "../services/date-utils";
 import { IServerHabitData } from "../habits.model";
 import { AppEvents } from "./events";
 import { HabitModel, IState } from "./reducer";
+import { useDispatch } from "react-redux";
+import { throttle } from "../services/utils";
 
 export const makeAction = <T extends AppEvents, P>(type: T) => (payload: P) => {
   return {
@@ -17,10 +19,12 @@ interface IToggleLinkPayload {
   index: number;
 }
 
-export const ToggleLinkAction = makeAction<
-  AppEvents.TOGGLE_DATE,
-  IToggleLinkPayload
->(AppEvents.TOGGLE_DATE);
+export const ToggleLinkAction = (payload: IToggleLinkPayload) => {
+  return {
+    type: AppEvents.TOGGLE_DATE,
+    payload,
+  }
+};
 
 interface ILoadHabitsPayload {
   ownerId: string;
@@ -41,12 +45,12 @@ type IServerResponse = IHabitOnServer[];
 const bearerToken =
   "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk3OTkyNTU0ZDYyMzUzNjg5YjVkMGEiLCJpYXQiOjE2MDUxNTIwMDd9.13IGP-iDtchDzCJJW14tJjMDKlUwG-28RG9IYEPK76E";
 
-export const saveDatesToServer = (): ThunkAction<
+export function saveDatesToServer(): ThunkAction<
   void,
   IState,
   unknown,
   Action<string>
-> => {
+> {
   return async function (dispatch, getState) {
     const dirtyHabits = getState().habitHistory.filter((habit) => habit.dirty);
     const dates = getState().displayedDates;
@@ -95,7 +99,7 @@ const transtlateDatesToView = (
 ): HabitModel[] => {
   return mockData.map((habit) => {
     const { name, _id } = habit;
-    const history = habit.history.reverse();
+    const history = habit.history;
 
     let habitDateIdx = 0;
     const combined = new Array(displayedDates.length);
