@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import HabitGrid from "../components/habit-grid";
 import mockData from "../mock-data.json";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { HabitModel, IState } from "../redux/reducer";
 import { LoadDatesAction, loadDatesFromServer } from "../redux/actions";
 import { DateStr, toDateStr } from "./services/date-utils";

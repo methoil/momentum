@@ -39,31 +39,40 @@ type IServerResponse = IHabitOnServer[];
 
 // TODO: generate this properly
 const bearerToken =
-"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk3OTkyNTU0ZDYyMzUzNjg5YjVkMGEiLCJpYXQiOjE2MDUxNTIwMDd9.13IGP-iDtchDzCJJW14tJjMDKlUwG-28RG9IYEPK76E";
+  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk3OTkyNTU0ZDYyMzUzNjg5YjVkMGEiLCJpYXQiOjE2MDUxNTIwMDd9.13IGP-iDtchDzCJJW14tJjMDKlUwG-28RG9IYEPK76E";
 
-export const saveDatesToServer = (): ThunkAction<void, IState, unknown, Action<string>> => {
+export const saveDatesToServer = (): ThunkAction<
+  void,
+  IState,
+  unknown,
+  Action<string>
+> => {
   return async function (dispatch, getState) {
-    const dirtyHabits = getState().habitHistory.filter(habit => habit.dirty);
+    const dirtyHabits = getState().habitHistory.filter((habit) => habit.dirty);
+    const dates = getState().displayedDates;
     try {
-      const requests = dirtyHabits.map(habit => {
-        fetch(`${process.env.REACT_APP_SERVER_URL}/habits?_id=${habit._id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({history}),
+      const requests = dirtyHabits.map((habit) => {
+        const history = dates.filter((date, i) => habit.history[i]);
+        fetch(`${process.env.REACT_APP_SERVER_URL}/habits/${habit._id}`, {
+          method: "PATCH",
+          headers: {
+            Authorization: bearerToken,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ history }),
         });
       });
-      
+
       await Promise.all(requests);
     } catch (error) {
-      console.error('error saving habits', error);
+      console.error("error saving habits", error);
     }
-  }
-}
-
+  };
+};
 
 export const loadDatesFromServer = (
   displayedDates: DateStr[]
 ): ThunkAction<void, IState, unknown, Action<string>> => {
-
   return async function (dispatch) {
     const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits`, {
       headers: { Authorization: bearerToken },

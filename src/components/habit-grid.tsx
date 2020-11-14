@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { saveDatesToServer } from "../redux/actions";
 
 import { IState } from "../redux/reducer";
 import { TitleBar } from "./dates-title-bar";
@@ -10,6 +11,9 @@ export default function HabitGrid() {
   const habitIds = useSelector((state: IState) => state.habitHistory).map(
     (habit) => habit._id
   );
+
+    const dispatch = useDispatch();
+
   const displayedDates = useSelector((state: IState) => state.displayedDates);
   const timePeriods: JSX.Element[] = [];
 
@@ -20,6 +24,9 @@ export default function HabitGrid() {
 
   return (
     <div className="App">
+      <div>
+        <button onClick={() => dispatch(saveDatesToServer())}>Save</button>
+      </div>
       <h1 className="App-header">Momentum</h1>
       <div className="chains-container">
         <TitleBar dates={displayedDates}></TitleBar>
