@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DateStr } from "../app/services/date-utils";
+import { DateStr } from "../services/date-utils";
 import "./css/link.scss";
 
 interface ILinkProps {

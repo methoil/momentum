@@ -1,4 +1,4 @@
-import { DateStr } from "./app/services/date-utils";
+import { DateStr } from "./services/date-utils";
 
 export interface IHabitCollection {
   [key: string]: IHabitMeta;

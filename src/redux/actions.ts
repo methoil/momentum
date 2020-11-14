@@ -1,9 +1,11 @@
 import { Action } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { DateStr } from "../app/services/date-utils";
+import { DateStr } from "../services/date-utils";
 import { IServerHabitData } from "../habits.model";
 import { AppEvents } from "./events";
 import { HabitModel, IState } from "./reducer";
+import { useDispatch } from "react-redux";
+import { throttle } from "../services/utils";
 
 export const makeAction = <T extends AppEvents, P>(type: T) => (payload: P) => {
   return {
@@ -17,10 +19,12 @@ interface IToggleLinkPayload {
   index: number;
 }
 
-export const ToggleLinkAction = makeAction<
-  AppEvents.TOGGLE_DATE,
-  IToggleLinkPayload
->(AppEvents.TOGGLE_DATE);
+export const ToggleLinkAction = (payload: IToggleLinkPayload) => {
+  return {
+    type: AppEvents.TOGGLE_DATE,
+    payload,
+  }
+};
 
 interface ILoadHabitsPayload {
   ownerId: string;
@@ -37,13 +41,42 @@ interface IHabitOnServer {
 
 type IServerResponse = IHabitOnServer[];
 
+// TODO: generate this properly
+const bearerToken =
+  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk3OTkyNTU0ZDYyMzUzNjg5YjVkMGEiLCJpYXQiOjE2MDUxNTIwMDd9.13IGP-iDtchDzCJJW14tJjMDKlUwG-28RG9IYEPK76E";
+
+export function saveDatesToServer(): ThunkAction<
+  void,
+  IState,
+  unknown,
+  Action<string>
+> {
+  return async function (dispatch, getState) {
+    const dirtyHabits = getState().habitHistory.filter((habit) => habit.dirty);
+    const dates = getState().displayedDates;
+    try {
+      const requests = dirtyHabits.map((habit) => {
+        const history = dates.filter((date, i) => habit.history[i]);
+        fetch(`${process.env.REACT_APP_SERVER_URL}/habits/${habit._id}`, {
+          method: "PATCH",
+          headers: {
+            Authorization: bearerToken,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ history }),
+        });
+      });
+
+      await Promise.all(requests);
+    } catch (error) {
+      console.error("error saving habits", error);
+    }
+  };
+};
+
 export const loadDatesFromServer = (
   displayedDates: DateStr[]
 ): ThunkAction<void, IState, unknown, Action<string>> => {
-  // TODO: generate this properly
-  const bearerToken =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk3OTkyNTU0ZDYyMzUzNjg5YjVkMGEiLCJpYXQiOjE2MDQ4OTU4ODd9.iwCsbLn1fOvGRqLF0m2EVOpWWs_89G2uWa3GFlVwQuc";
-
   return async function (dispatch) {
     const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits`, {
       headers: { Authorization: bearerToken },
@@ -66,7 +99,7 @@ const transtlateDatesToView = (
 ): HabitModel[] => {
   return mockData.map((habit) => {
     const { name, _id } = habit;
-    const history = habit.history[0].split(",").reverse();
+    const history = habit.history;
 
     let habitDateIdx = 0;
     const combined = new Array(displayedDates.length);
@@ -78,7 +111,7 @@ const transtlateDatesToView = (
         combined[i] = false;
       }
     }
-    return { name, _id, history: combined };
+    return { name, _id, history: combined, dirty: false };
   });
 };
 

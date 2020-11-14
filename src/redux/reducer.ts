@@ -1,4 +1,4 @@
-import { DateStr } from "../app/services/date-utils";
+import { DateStr } from "../services/date-utils";
 import { IAction } from "./actions";
 import { AppEvents } from "./events";
 
@@ -6,6 +6,7 @@ export type HabitModel = {
   name: string;
   _id: string;
   history: boolean[];
+  dirty: boolean;
 };
 
 export type IState = {
@@ -33,6 +34,7 @@ export const reducer = (state: IState = defaultState, action: IAction) => {
       if (habitIdx > -1) {
         const newHabit = Object.assign({}, state.habitHistory[habitIdx]);
         newHabit.history[index] = !newHabit.history[index];
+        newHabit.dirty = true;
         state.habitHistory[habitIdx] = newHabit;
       }
 
