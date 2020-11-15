@@ -1,5 +1,5 @@
 import { DateStr } from "../services/date-utils";
-import { IAction } from "./actions";
+import { IAction } from "./actions/habit-actions";
 import { AppEvents } from "./events";
 
 export type HabitModel = {

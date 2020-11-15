@@ -1,7 +1,7 @@
 import { throttle } from "../services/utils";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { saveDatesToServer } from "../redux/actions";
+import { saveDatesToServer } from "../redux/actions/habit-actions";
 
 import { IState } from "../redux/reducer";
 import { TitleBar } from "./dates-title-bar";

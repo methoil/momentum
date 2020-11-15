@@ -1,11 +1,9 @@
 import { Action } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { DateStr } from "../services/date-utils";
-import { IServerHabitData } from "../habits.model";
-import { AppEvents } from "./events";
-import { HabitModel, IState } from "./reducer";
-import { useDispatch } from "react-redux";
-import { throttle } from "../services/utils";
+import { DateStr } from "../../services/date-utils";
+import { IServerHabitData } from "../../habits.model";
+import { AppEvents } from "../events";
+import { HabitModel, IState } from "../reducer";
 
 export const makeAction = <T extends AppEvents, P>(type: T) => (payload: P) => {
   return {
@@ -85,7 +83,7 @@ export const loadDatesFromServer = (
     const habitHistory = transtlateDatesToView(serverData, displayedDates);
 
     const loadAppPayload = {
-      ownerId: "5f97992554d62353689b5d0a",
+      ownerId: "5f97992554d62353689b5d0a", // TODO: set this properly
       displayedDates,
       habitHistory,
     };

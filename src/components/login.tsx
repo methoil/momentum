@@ -1,16 +1,10 @@
 import React from "react";
 
-export default async function Login() {
+export default function Login() {
   let loggedIn = true;
   try {
     let bearerToken = localStorage.getItem("BEARER_TOKEN");
-    if (bearerToken) {
-      const userPromise = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/users/me`
-      );
-      const userInfo = await userPromise.json();
-
-    }
+    
   } catch (error) {
     loggedIn = false;
   }
