@@ -68,16 +68,25 @@ export const loginUser = (
   };
 };
 
-export const createUser = (email: string, password: string, username?: string): ThunkAction<void, IState, unknown, Action<string>> => {
+export const createUser = (
+  email: string,
+  password: string,
+  username?: string
+): ThunkAction<void, IState, unknown, Action<string>> => {
   return async (dispatch) => {
     try {
       const body = {
-        email, password, username,
-      }
-      const createPromise = await fetch(`${process.env.REACT_APP_SERVER_URL}/users`, {
-        method: 'POST',
-        body: JSON.stringify(body);
-      });
+        email,
+        password,
+        username,
+      };
+      const createPromise = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/users`,
+        {
+          method: "POST",
+          body: JSON.stringify(body),
+        }
+      );
       const res = await createPromise.json();
       const { _id } = res.user;
       const payload = {
@@ -87,8 +96,6 @@ export const createUser = (email: string, password: string, username?: string): 
         username,
       };
       dispatch(SetUserInfoAction(payload));
-    } catch (error) {
-      
-    }
-  }
-}
+    } catch (error) {}
+  };
+};

@@ -10,15 +10,25 @@ export type HabitModel = {
 };
 
 export type IState = {
-  ownerId: string;
   habitHistory: HabitModel[];
   displayedDates: DateStr[];
+  user: {
+    userId: string;
+    email: string;
+    username: string;
+    token: string;
+  };
 };
 
 const defaultState: IState = {
-  ownerId: "",
   displayedDates: [],
   habitHistory: [],
+  user: {
+    userId: "",
+    email: "",
+    username: "",
+    token: "",
+  },
 };
 
 export const reducer = (state: IState = defaultState, action: IAction) => {
@@ -39,6 +49,11 @@ export const reducer = (state: IState = defaultState, action: IAction) => {
       }
 
       return state;
+
+    case AppEvents.SET_USER_INFO:
+      Object.assign(state.user, action.payload);
+      return state;
+
     default:
       return state;
   }
