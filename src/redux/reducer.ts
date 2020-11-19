@@ -1,33 +1,35 @@
-import { DateStr } from "../services/date-utils";
-import { IAction } from "./actions/habit-actions";
-import { AppEvents } from "./events";
+import { DateStr } from '../services/date-utils';
+import { IAction } from './actions/habit-actions';
+import { AppEvents } from './events';
 
-export type HabitModel = {
-  name: string;
+export interface IHabit {
   _id: string;
+  name: string;
   history: boolean[];
   dirty: boolean;
-};
+}
+
+export interface IUser {
+  userId: string;
+  email: string;
+  username: string;
+  token: string;
+}
 
 export type IState = {
-  habitHistory: HabitModel[];
+  habitHistory: IHabit[];
   displayedDates: DateStr[];
-  user: {
-    userId: string;
-    email: string;
-    username: string;
-    token: string;
-  };
+  user: IUser;
 };
 
 const defaultState: IState = {
   displayedDates: [],
   habitHistory: [],
   user: {
-    userId: "",
-    email: "",
-    username: "",
-    token: "",
+    userId: '',
+    email: '',
+    username: '',
+    token: '',
   },
 };
 

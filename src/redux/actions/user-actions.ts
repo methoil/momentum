@@ -1,7 +1,7 @@
-import { Action } from "redux";
-import { ThunkAction } from "redux-thunk";
-import { AppEvents } from "../events";
-import { IState } from "../reducer";
+import { Action } from 'redux';
+import { ThunkAction } from 'redux-thunk';
+import { AppEvents } from '../events';
+import { IState } from '../reducer';
 
 interface ISetUserInfoPayload {
   token: string;
@@ -49,7 +49,7 @@ export const loginUser = (
       const userPromise = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/users/login`,
         {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify(body),
         }
       );
@@ -83,8 +83,11 @@ export const createUser = (
       const createPromise = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/users`,
         {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify(body),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
       );
       const res = await createPromise.json();
