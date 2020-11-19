@@ -1,25 +1,22 @@
 import React from 'react';
-import { useDispatch, connect } from 'react-redux';
-import { IAppState, store } from '../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   autoLoginFromBearer,
   createUser,
   loginUser,
 } from '../redux/actions/user-actions';
-import { IUser } from '../redux/reducer';
+import { IState, IUser } from '../redux/reducer';
 import '../App.css';
 
-interface IProps extends IUser {}
-
-function Login(Props: IProps) {
-  const { email, username, token } = Props;
+export default function Login() {
   const dispatch = useDispatch();
+  const user: IUser = useSelector((state: IState) => state.user);
   let loggedIn = false;
   let formEmail = '';
   let formPassword = '';
   let formUsername = '';
 
-  if (token) {
+  if (user.token) {
     loggedIn = true;
   }
 
@@ -74,12 +71,6 @@ function Login(Props: IProps) {
       </div>
     );
   } else {
-    return <div>Logged in as {username}</div>;
+    return <div className={'app-text'}>Logged in as {user.username}</div>;
   }
 }
-
-function mapStateToProps(state: IAppState) {
-  return Object.assign({}, state.user);
-}
-
-export default connect(mapStateToProps)(Login);

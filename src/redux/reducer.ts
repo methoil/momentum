@@ -1,5 +1,6 @@
 import { DateStr } from '../services/date-utils';
 import { IAction } from './actions/habit-actions';
+import { SetUserInfoAction } from './actions/user-actions';
 import { AppEvents } from './events';
 
 export interface IHabit {
@@ -33,7 +34,10 @@ const defaultState: IState = {
   },
 };
 
-export const reducer = (state: IState = defaultState, action: IAction) => {
+export const reducer = (
+  state: IState = defaultState,
+  action: IAction | any
+) => {
   switch (action.type) {
     case AppEvents.LOAD_DATES:
       return Object.assign(state, action.payload);
@@ -53,7 +57,7 @@ export const reducer = (state: IState = defaultState, action: IAction) => {
       return state;
 
     case AppEvents.SET_USER_INFO:
-      Object.assign(state.user, action.payload);
+      state.user = action.payload;
       return state;
 
     default:
