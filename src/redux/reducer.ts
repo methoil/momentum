@@ -1,27 +1,43 @@
-import { DateStr } from "../services/date-utils";
-import { IAction } from "./actions";
-import { AppEvents } from "./events";
+import { DateStr } from '../services/date-utils';
+import { IAction } from './actions/habit-actions';
+import { SetUserInfoAction } from './actions/user-actions';
+import { AppEvents } from './events';
 
-export type HabitModel = {
-  name: string;
+export interface IHabit {
   _id: string;
+  name: string;
   history: boolean[];
   dirty: boolean;
-};
+}
+
+export interface IUser {
+  userId: string;
+  email: string;
+  username: string;
+  token: string;
+}
 
 export type IState = {
-  ownerId: string;
-  habitHistory: HabitModel[];
+  habitHistory: IHabit[];
   displayedDates: DateStr[];
+  user: IUser;
 };
 
 const defaultState: IState = {
-  ownerId: "",
   displayedDates: [],
   habitHistory: [],
+  user: {
+    userId: '',
+    email: '',
+    username: '',
+    token: '',
+  },
 };
 
-export const reducer = (state: IState = defaultState, action: IAction) => {
+export const reducer = (
+  state: IState = defaultState,
+  action: IAction | any
+) => {
   switch (action.type) {
     case AppEvents.LOAD_DATES:
       return Object.assign(state, action.payload);
@@ -39,6 +55,11 @@ export const reducer = (state: IState = defaultState, action: IAction) => {
       }
 
       return state;
+
+    case AppEvents.SET_USER_INFO:
+      state.user = action.payload;
+      return state;
+
     default:
       return state;
   }

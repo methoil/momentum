@@ -6,7 +6,7 @@ import { v4 as uuid } from "uuid";
 import Link from "./link";
 import HabitCard from "./habit-card";
 import { IState } from "../redux/reducer";
-import { ToggleLinkAction } from "../redux/actions";
+import { ToggleLinkAction } from "../redux/actions/habit-actions";
 
 interface IProps {
   habitId: string;

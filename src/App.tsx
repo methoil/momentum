@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import HabitGrid from "./components/habit-grid";
 import { useDispatch } from "react-redux";
-import { LoadDatesAction, loadDatesFromServer } from "./redux/actions";
+import { LoadDatesAction, loadDatesFromServer } from "./redux/actions/habit-actions";
 import { DateStr, toDateStr } from "./services/date-utils";
 
 function App() {
