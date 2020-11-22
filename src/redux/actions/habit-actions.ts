@@ -58,7 +58,7 @@ export function saveDatesToServer(): ThunkAction<
         fetch(`${process.env.REACT_APP_SERVER_URL}/habits/${habit._id}`, {
           method: 'PATCH',
           headers: {
-            Authorization: bearerToken,
+            Authorization: getState().user.token,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ history }),
@@ -75,15 +75,15 @@ export function saveDatesToServer(): ThunkAction<
 export const loadDatesFromServer = (
   displayedDates: DateStr[]
 ): ThunkAction<void, IState, unknown, Action<string>> => {
-  return async function (dispatch) {
+  return async function (dispatch, getState) {
     const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits`, {
-      headers: { Authorization: bearerToken },
+      headers: { Authorization: getState().user.token },
     });
     const serverData: any = await res.json();
     const habitHistory = transtlateDatesToView(serverData, displayedDates);
 
     const loadAppPayload = {
-      ownerId: '5f97992554d62353689b5d0a', // TODO: set this properly
+      ownerId: getState().user.userId, // TODO: set this properly
       displayedDates,
       habitHistory,
     };

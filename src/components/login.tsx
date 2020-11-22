@@ -13,47 +13,26 @@ export default function Login() {
   const dispatch = useDispatch();
   const user: IUser = useSelector((state: IState) => state.user);
   const [creatingUser, setCreatingUser] = useState(false);
-  let loggedIn = false;
-  let formEmail = '';
-  let formPassword = '';
-  let formUsername = '';
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
 
-  if (user.token) {
-    loggedIn = true;
-  }
-
-  try {
-    let bearerToken = localStorage.getItem('BEARER_TOKEN');
-    if (bearerToken) {
-      try {
-        dispatch(autoLoginFromBearer(bearerToken));
-      } catch (error) {
-        loggedIn = false;
-      }
+  let bearerToken = localStorage.getItem('BEARER_TOKEN');
+  if (bearerToken && !user.loggedIn) {
+    try {
+      dispatch(autoLoginFromBearer(bearerToken));
+    } catch (error) {
+      localStorage.removeItem('BEARER_TOKEN');
     }
-  } catch (error) {
-    loggedIn = false;
-  }
-
-  function handleEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
-    formEmail = event.target.value;
-  }
-
-  function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
-    formPassword = event.target.value;
-  }
-
-  function handleUsernameChange(event: React.ChangeEvent<HTMLInputElement>) {
-    formUsername = event.target.value;
   }
 
   function submitForms() {
     creatingUser
-      ? dispatch(createUser(formEmail, formPassword, formUsername))
-      : dispatch(loginUser(formEmail, formPassword));
+      ? dispatch(createUser(email, password, username))
+      : dispatch(loginUser(email, password));
   }
 
-  if (!loggedIn) {
+  if (!user.loggedIn) {
     return (
       <div className={'login-container app-text'}>
         <h1 className="App-header">Momentum</h1>
@@ -62,16 +41,19 @@ export default function Login() {
             <div></div>
             <h3>{creatingUser ? 'Create Account' : 'Login'}</h3>
             <div>
-            <button onClick={() => setCreatingUser(!creatingUser)}>
-              {creatingUser ? 'Login instead' : 'Create new user'}
-            </button>
-          </div>
+              <button onClick={() => setCreatingUser(!creatingUser)}>
+                {creatingUser ? 'Login instead' : 'Create new user'}
+              </button>
+            </div>
           </div>
           <div className={'login-form-containers app-text'}>
             {creatingUser ? (
               <div>
                 <div className={'login-form-label'}>Username:</div>
-                <input type="text" onChange={handleUsernameChange} />
+                <input
+                  type="text"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
               </div>
             ) : (
               ''
@@ -80,11 +62,14 @@ export default function Login() {
               <div className={'login-form-label'}>
                 <label>Email</label>:
               </div>
-              <input type="email" onChange={handleEmailChange} />
+              <input type="email" onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div>
               <div className={'login-form-label'}>Password:</div>
-              <input type="password" onChange={handlePasswordChange} />
+              <input
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
           </div>
           <div>

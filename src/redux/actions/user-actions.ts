@@ -25,6 +25,11 @@ export const autoLoginFromBearer = (
       const userPromise = await fetch(
         `${process.env.REACT_APP_SERVER_URL}/users/me`
       );
+      if (userPromise.status > 210 || userPromise.status < 200) {
+        localStorage.removeItem('BEARER_TOKEN');
+        return Promise.reject(userPromise.statusText);
+      }
+
       const { _id, username, email } = await userPromise.json();
       const payload = {
         token: existingBearerToken,
@@ -36,6 +41,7 @@ export const autoLoginFromBearer = (
 
       dispatch(SetUserInfoAction(payload));
     } catch (error) {
+      localStorage.removeItem('BEARER_TOKEN');
       return Promise.reject(error);
     }
   };
@@ -59,6 +65,10 @@ export const loginUser = (
         }
       );
       const res = await userPromise.json();
+      if (userPromise.status > 210 || userPromise.status < 200) {
+        localStorage.removeItem('BEARER_TOKEN');
+        return Promise.reject(userPromise.statusText);
+      }
       const { _id, username } = res.user;
       const payload = {
         userId: _id,
@@ -98,6 +108,10 @@ export const createUser = (
         }
       );
       const res = await createPromise.json();
+      if (createPromise.status > 210 || createPromise.status < 200) {
+        localStorage.removeItem('BEARER_TOKEN');
+        return Promise.reject(createPromise.statusText);
+      }
       const { _id } = res.user;
       const payload = {
         userId: _id,
@@ -108,6 +122,18 @@ export const createUser = (
       };
       dispatch(SetUserInfoAction(payload));
       localStorage.setItem('BEARER_TOKEN', payload.token);
+    } catch (error) {}
+  };
+};
+
+export const logoutUser = (): ThunkAction<
+  void,
+  IState,
+  unknown,
+  Action<string>
+> => {
+  return async (dispatch) => {
+    try {
     } catch (error) {}
   };
 };

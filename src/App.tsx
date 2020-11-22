@@ -11,10 +11,6 @@ import { DateStr, toDateStr } from './services/date-utils';
 import { IState } from './redux/reducer';
 
 function App() {
-  // TODO: login here
-  const dispatch = useDispatch();
-  const displayedDates = generateDisplayedDates(30);
-  dispatch(loadDatesFromServer(displayedDates));
   const loggedIn: boolean = useSelector((state: IState) => state.user.loggedIn);
 
   return (
@@ -22,16 +18,6 @@ function App() {
       {loggedIn ? <HabitGrid></HabitGrid> : <Login></Login>}
     </div>
   );
-}
-
-function generateDisplayedDates(daysBack: number): DateStr[] {
-  const labels: DateStr[] = [];
-  const date = new Date();
-  for (let i = 0; i < daysBack; i++) {
-    labels.push(toDateStr(date));
-    date.setDate(date.getDate() - 1);
-  }
-  return labels;
 }
 
 export default App;
