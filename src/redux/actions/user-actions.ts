@@ -33,6 +33,7 @@ export const autoLoginFromBearer = (
         username,
         loggedIn: true,
       };
+
       dispatch(SetUserInfoAction(payload));
     } catch (error) {
       return Promise.reject(error);
@@ -52,6 +53,9 @@ export const loginUser = (
         {
           method: 'POST',
           body: JSON.stringify(body),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
       );
       const res = await userPromise.json();
@@ -64,6 +68,7 @@ export const loginUser = (
         loggedIn: true,
       };
       dispatch(SetUserInfoAction(payload));
+      localStorage.setItem('BEARER_TOKEN', payload.token);
     } catch (error) {
       return Promise.reject(error);
     }
@@ -102,6 +107,7 @@ export const createUser = (
         loggedIn: true,
       };
       dispatch(SetUserInfoAction(payload));
+      localStorage.setItem('BEARER_TOKEN', payload.token);
     } catch (error) {}
   };
 };

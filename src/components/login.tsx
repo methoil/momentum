@@ -56,9 +56,17 @@ export default function Login() {
   if (!loggedIn) {
     return (
       <div className={'login-container app-text'}>
-        <h1>Momentum</h1>
+        <h1 className="App-header">Momentum</h1>
         <div className={'login-controls-box'}>
-          <h3>{creatingUser ? 'Create Account' : 'Login'}</h3>
+          <div className="login-control-box-header">
+            <div></div>
+            <h3>{creatingUser ? 'Create Account' : 'Login'}</h3>
+            <div>
+            <button onClick={() => setCreatingUser(!creatingUser)}>
+              {creatingUser ? 'Login instead' : 'Create new user'}
+            </button>
+          </div>
+          </div>
           <div className={'login-form-containers app-text'}>
             {creatingUser ? (
               <div>
@@ -81,11 +89,6 @@ export default function Login() {
           </div>
           <div>
             <button onClick={submitForms}>Submit</button>
-          </div>
-          <div>
-            <button onClick={() => setCreatingUser(!creatingUser)}>
-              {creatingUser ? 'Login instead' : 'Create new user'}
-            </button>
           </div>
         </div>
       </div>
