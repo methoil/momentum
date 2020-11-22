@@ -55,32 +55,38 @@ export default function Login() {
 
   if (!loggedIn) {
     return (
-      <div className={'login-container'}>
-        <div className={'app-text'}>
-          <div>
-            <label>Email:</label>
-            <input type="email" onChange={handleEmailChange} />
-          </div>
-          <div>
-            <label>Password:</label>
-            <input type="password" onChange={handlePasswordChange} />
-          </div>
-          {creatingUser ? (
+      <div className={'login-container app-text'}>
+        <h1>Momentum</h1>
+        <div className={'login-controls-box'}>
+          <h3>{creatingUser ? 'Create Account' : 'Login'}</h3>
+          <div className={'login-form-containers app-text'}>
+            {creatingUser ? (
+              <div>
+                <div className={'login-form-label'}>Username:</div>
+                <input type="text" onChange={handleUsernameChange} />
+              </div>
+            ) : (
+              ''
+            )}
             <div>
-              <label>Username:</label>
-              <input type="text" onChange={handleUsernameChange} />
+              <div className={'login-form-label'}>
+                <label>Email</label>:
+              </div>
+              <input type="email" onChange={handleEmailChange} />
             </div>
-          ) : (
-            <br />
-          )}
-        </div>
-        <div>
-          <button onClick={submitForms}>Submit</button>
-        </div>
-        <div>
-          <button onClick={() => setCreatingUser(!creatingUser)}>
-            {creatingUser ? 'Login instead' : 'Create new user'}
-          </button>
+            <div>
+              <div className={'login-form-label'}>Password:</div>
+              <input type="password" onChange={handlePasswordChange} />
+            </div>
+          </div>
+          <div>
+            <button onClick={submitForms}>Submit</button>
+          </div>
+          <div>
+            <button onClick={() => setCreatingUser(!creatingUser)}>
+              {creatingUser ? 'Login instead' : 'Create new user'}
+            </button>
+          </div>
         </div>
       </div>
     );

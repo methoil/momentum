@@ -1,7 +1,36 @@
-.login-container {
+@mixin center-content() {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.login-container {
+  @include center-content();
   min-height: 100vh;
+}
+
+.login-controls-box {
+  @include center-content();
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 35vw;
+  height: 30vh;
+  background-color: rgb(133, 44, 60);
+  border-radius: 25px;
+  border: 2px paleturquoise;
+}
+
+.login-form-containers {
+  height: 15vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.login-form-label {
+  display: flex;
 }
