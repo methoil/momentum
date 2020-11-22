@@ -31,6 +31,7 @@ export const autoLoginFromBearer = (
         userId: _id,
         email,
         username,
+        loggedIn: true,
       };
       dispatch(SetUserInfoAction(payload));
     } catch (error) {
@@ -60,6 +61,7 @@ export const loginUser = (
         email,
         token: res.token,
         username,
+        loggedIn: true,
       };
       dispatch(SetUserInfoAction(payload));
     } catch (error) {
@@ -97,6 +99,7 @@ export const createUser = (
         email,
         token: res.token,
         username,
+        loggedIn: true,
       };
       dispatch(SetUserInfoAction(payload));
     } catch (error) {}

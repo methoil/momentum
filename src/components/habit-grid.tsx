@@ -1,12 +1,11 @@
-import { throttle } from "../services/utils";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { saveDatesToServer } from "../redux/actions/habit-actions";
+import { throttle } from '../services/utils';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveDatesToServer } from '../redux/actions/habit-actions';
 
-import { IState } from "../redux/reducer";
-import { TitleBar } from "./dates-title-bar";
-import { HabitChain } from "./habit-chain";
-import Login from './login';
+import { IState } from '../redux/reducer';
+import { TitleBar } from './dates-title-bar';
+import { HabitChain } from './habit-chain';
 
 export default function HabitGrid() {
   // TODO: change this to mapStateToProps?
@@ -35,11 +34,7 @@ export default function HabitGrid() {
   });
 
   return (
-    <div className="App">
-      <Login></Login>
-      <div>
-        <button onClick={() => dispatch(saveDatesToServer())}>Save</button>
-      </div>
+    <div>
       <h1 className="App-header">Momentum</h1>
       <div className="chains-container">
         <TitleBar dates={displayedDates}></TitleBar>

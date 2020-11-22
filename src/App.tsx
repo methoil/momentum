@@ -1,17 +1,27 @@
-import React, { useEffect } from "react";
-import "./App.css";
-import HabitGrid from "./components/habit-grid";
-import { useDispatch } from "react-redux";
-import { LoadDatesAction, loadDatesFromServer } from "./redux/actions/habit-actions";
-import { DateStr, toDateStr } from "./services/date-utils";
+import React, { useEffect } from 'react';
+import './App.css';
+import HabitGrid from './components/habit-grid';
+import Login from './components/login';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  LoadDatesAction,
+  loadDatesFromServer,
+} from './redux/actions/habit-actions';
+import { DateStr, toDateStr } from './services/date-utils';
+import { IState } from './redux/reducer';
 
 function App() {
   // TODO: login here
   const dispatch = useDispatch();
-  const displayedDates = generateDisplayedDates(30);  
+  const displayedDates = generateDisplayedDates(30);
   dispatch(loadDatesFromServer(displayedDates));
+  const loggedIn: boolean = useSelector((state: IState) => state.user.loggedIn);
 
-  return <HabitGrid></HabitGrid>;
+  return (
+    <div className={'App'}>
+      {loggedIn ? <HabitGrid></HabitGrid> : <Login></Login>}
+    </div>
+  );
 }
 
 function generateDisplayedDates(daysBack: number): DateStr[] {

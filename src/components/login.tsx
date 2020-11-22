@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   autoLoginFromBearer,
@@ -7,10 +7,12 @@ import {
 } from '../redux/actions/user-actions';
 import { IState, IUser } from '../redux/reducer';
 import '../App.css';
+import './css/login.scss';
 
 export default function Login() {
   const dispatch = useDispatch();
   const user: IUser = useSelector((state: IState) => state.user);
+  const [creatingUser, setCreatingUser] = useState(false);
   let loggedIn = false;
   let formEmail = '';
   let formPassword = '';
@@ -45,27 +47,39 @@ export default function Login() {
     formUsername = event.target.value;
   }
 
+  function submitForms() {
+    creatingUser
+      ? dispatch(createUser(formEmail, formPassword, formUsername))
+      : dispatch(loginUser(formEmail, formPassword));
+  }
+
   if (!loggedIn) {
     return (
-      <div>
+      <div className={'login-container'}>
         <div className={'app-text'}>
-          <label>Email:</label>
-          <input type="email" onChange={handleEmailChange} />
-          <label>Password:</label>
-          <input type="password" onChange={handlePasswordChange} />
-          <label>Username:</label>
-          <input type="text" onChange={handleUsernameChange} />
+          <div>
+            <label>Email:</label>
+            <input type="email" onChange={handleEmailChange} />
+          </div>
+          <div>
+            <label>Password:</label>
+            <input type="password" onChange={handlePasswordChange} />
+          </div>
+          {creatingUser ? (
+            <div>
+              <label>Username:</label>
+              <input type="text" onChange={handleUsernameChange} />
+            </div>
+          ) : (
+            <br />
+          )}
         </div>
         <div>
-          <button onClick={() => dispatch(loginUser(formEmail, formPassword))}>
-            Login
-          </button>
-          <button
-            onClick={() =>
-              dispatch(createUser(formEmail, formPassword, formUsername))
-            }
-          >
-            Create Account
+          <button onClick={submitForms}>Submit</button>
+        </div>
+        <div>
+          <button onClick={() => setCreatingUser(!creatingUser)}>
+            {creatingUser ? 'Login instead' : 'Create new user'}
           </button>
         </div>
       </div>

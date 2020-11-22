@@ -15,6 +15,7 @@ export interface IUser {
   email: string;
   username: string;
   token: string;
+  loggedIn: boolean;
 }
 
 export type IState = {
@@ -31,6 +32,7 @@ const defaultState: IState = {
     email: '',
     username: '',
     token: '',
+    loggedIn: false,
   },
 };
 
