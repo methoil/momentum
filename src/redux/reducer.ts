@@ -62,6 +62,10 @@ export const reducer = (
       state.user = action.payload;
       return state;
 
+    case AppEvents.RESET_USER_INFO:
+      state.user = Object.assign({}, defaultState.user);
+      return state;
+
     default:
       return state;
   }

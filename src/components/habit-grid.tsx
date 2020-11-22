@@ -11,6 +11,7 @@ import { TitleBar } from './dates-title-bar';
 import { HabitChain } from './habit-chain';
 import './css/habit-grid.scss';
 import { generateDisplayedDates } from '../services/date-utils';
+import { logoutUser } from '../redux/actions/user-actions';
 
 export default function HabitGrid() {
   const habitIds = useSelector((state: IState) => state.habitHistory).map(
@@ -46,7 +47,7 @@ export default function HabitGrid() {
     <div>
       <div className="grid-login-logout-info app-text">
         <p>Logged in as {username}</p>
-        <button>Loggout</button>
+        <button onClick={() => dispatch(logoutUser())}>Loggout</button>
       </div>
       <h1 className="App-header">Momentum</h1>
       <div className="chains-container">

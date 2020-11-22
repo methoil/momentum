@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { AppEvents } from '../events';
@@ -14,6 +15,12 @@ export const SetUserInfoAction = (payload: ISetUserInfoPayload) => {
   return {
     type: AppEvents.SET_USER_INFO,
     payload,
+  };
+};
+
+export const ResetUserInfoAction = () => {
+  return {
+    type: AppEvents.RESET_USER_INFO,
   };
 };
 
@@ -73,7 +80,7 @@ export const loginUser = (
       const payload = {
         userId: _id,
         email,
-        token: res.token,
+        token: `Bearer ${res.token}`,
         username,
         loggedIn: true,
       };
@@ -116,7 +123,7 @@ export const createUser = (
       const payload = {
         userId: _id,
         email,
-        token: res.token,
+        token: `Bearer ${res.token}`,
         username,
         loggedIn: true,
       };
@@ -132,7 +139,23 @@ export const logoutUser = (): ThunkAction<
   unknown,
   Action<string>
 > => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const logoutPromise = await fetch(
+      `${process.env.REACT_APP_SERVER_URL}/users/logout`,
+      {
+        method: 'POST',
+        headers: { Authorization: getState().user.token },
+      }
+    );
+    const res = await logoutPromise.json();
+    if (logoutPromise.status > 210 || logoutPromise.status < 200) {
+      localStorage.removeItem('BEARER_TOKEN');
+      return Promise.reject(logoutPromise.statusText);
+    }
+
+    localStorage.removeItem('BEARER_TOKEN');
+    dispatch(ResetUserInfoAction());
+
     try {
     } catch (error) {}
   };
