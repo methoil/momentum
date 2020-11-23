@@ -9,6 +9,7 @@ import {
 import { IState } from '../redux/reducer';
 import { TitleBar } from './dates-title-bar';
 import { HabitChain } from './habit-chain';
+import { CreateHabit } from './create-habit';
 import './css/habit-grid.scss';
 import { generateDisplayedDates } from '../services/date-utils';
 import { logoutUser } from '../redux/actions/user-actions';
@@ -53,6 +54,7 @@ export default function HabitGrid() {
       <div className="chains-container">
         <TitleBar dates={displayedDates}></TitleBar>
         {timePeriods}
+        <CreateHabit></CreateHabit>
       </div>
     </div>
   );

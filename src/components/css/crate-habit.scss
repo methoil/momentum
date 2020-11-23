@@ -1,0 +1,41 @@
+// todo: extend this with habit cards
+
+.create-habit-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 10rem;
+  width: 10rem;
+  margin: 1rem;
+}
+
+.create-habit-circle {
+  font-size: 1rem;
+  border-radius: 50%;
+  background-color: purple;
+  height: 8rem;
+  width: 8rem;
+
+  > .new-habit-plus-char {
+    position: relative;
+    top: -19%;
+    font-size: 7rem;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.create-habit-label {
+  font-size: 1.5rem;
+}
+
+.new-habit-name-input {
+  width: 6rem;
+}
+
+.new-habit-cancel-input-button {
+  &:hover {
+    cursor: pointer;
+  }
+}

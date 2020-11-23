@@ -1,13 +1,8 @@
 import React, { useEffect } from 'react';
-import './App.css';
+import './App.scss';
 import HabitGrid from './components/habit-grid';
 import Login from './components/login';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  LoadDatesAction,
-  loadDatesFromServer,
-} from './redux/actions/habit-actions';
-import { DateStr, toDateStr } from './services/date-utils';
+import { useSelector } from 'react-redux';
 import { IState } from './redux/reducer';
 
 function App() {

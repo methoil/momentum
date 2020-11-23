@@ -6,7 +6,7 @@ import {
   loginUser,
 } from '../redux/actions/user-actions';
 import { IState, IUser } from '../redux/reducer';
-import '../App.css';
+import '../App.scss';
 import './css/login.scss';
 
 export default function Login() {
