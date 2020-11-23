@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './css/crate-habit.scss';
 import '../App.scss';
 import { useDispatch } from 'react-redux';
@@ -8,6 +8,7 @@ export const CreateHabit: React.FC = () => {
   const dispatch = useDispatch();
   const [showInput, setShowInput] = useState(false);
   const [habitName, setHabitName] = useState('');
+  const inputNameEl = useRef<HTMLInputElement>(null);
 
   return (
     <div className="create-habit-container">
@@ -18,7 +19,9 @@ export const CreateHabit: React.FC = () => {
             <p className="app-text">Habit Name</p>
             <input
               type="text"
+              ref={inputNameEl}
               className="new-habit-name-input"
+              value={habitName}
               onChange={(e) => setHabitName(e.target.value)}
               onKeyUp={onInputNewHabit}
             />
@@ -30,10 +33,7 @@ export const CreateHabit: React.FC = () => {
             </button>
           </div>
         ) : (
-          <div
-            className="new-habit-plus-char"
-            onClick={() => setShowInput(true)}
-          >
+          <div className="new-habit-plus-char" onClick={onClickPlusIcon}>
             +
           </div>
         )}
@@ -41,9 +41,16 @@ export const CreateHabit: React.FC = () => {
     </div>
   );
 
+  function onClickPlusIcon() {
+    setShowInput(true);
+    inputNameEl?.current?.focus(); // TODO: how to focus before it's created??
+  }
+
   function onInputNewHabit(event: React.KeyboardEvent) {
     if (event.keyCode === 13) {
       dispatch(createHabitRequest(habitName));
+      setHabitName('');
+      setShowInput(false);
     }
   }
 };

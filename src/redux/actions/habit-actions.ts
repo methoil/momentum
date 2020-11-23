@@ -57,7 +57,7 @@ export const createHabitRequest = (
 
     const createHabitPayload = {
       name: habitName,
-      history: [],
+      history: new Array(getState().displayedDates.length).fill(false),
       _id: serverData._id,
       dirty: false,
     };
