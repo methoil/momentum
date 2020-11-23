@@ -39,10 +39,6 @@ interface IHabitOnServer {
 
 type IServerResponse = IHabitOnServer[];
 
-// TODO: generate this properly
-const bearerToken =
-  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk3OTkyNTU0ZDYyMzUzNjg5YjVkMGEiLCJpYXQiOjE2MDUxNTIwMDd9.13IGP-iDtchDzCJJW14tJjMDKlUwG-28RG9IYEPK76E';
-
 export function saveDatesToServer(): ThunkAction<
   void,
   IState,

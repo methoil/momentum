@@ -40,6 +40,8 @@ export const reducer = (
   state: IState = defaultState,
   action: IAction | any
 ) => {
+  state = Object.assign({}, state);
+
   switch (action.type) {
     case AppEvents.LOAD_DATES:
       return Object.assign(state, action.payload);

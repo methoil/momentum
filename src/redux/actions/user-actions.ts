@@ -30,7 +30,10 @@ export const autoLoginFromBearer = (
   return async (dispatch) => {
     try {
       const userPromise = await fetch(
-        `${process.env.REACT_APP_SERVER_URL}/users/me`
+        `${process.env.REACT_APP_SERVER_URL}/users/me`,
+        {
+          headers: { Authorization: existingBearerToken },
+        }
       );
       if (userPromise.status > 210 || userPromise.status < 200) {
         localStorage.removeItem('BEARER_TOKEN');
@@ -147,9 +150,8 @@ export const logoutUser = (): ThunkAction<
         headers: { Authorization: getState().user.token },
       }
     );
-    const res = await logoutPromise.json();
+    // const res = await logoutPromise.json();
     if (logoutPromise.status > 210 || logoutPromise.status < 200) {
-      localStorage.removeItem('BEARER_TOKEN');
       return Promise.reject(logoutPromise.statusText);
     }
 
