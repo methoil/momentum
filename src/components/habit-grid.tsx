@@ -31,7 +31,7 @@ export default function HabitGrid() {
   );
 
   const displayedDates = useSelector((state: IState) => state.displayedDates);
-  const timePeriods: JSX.Element[] = [];
+  const habitElements: JSX.Element[] = [];
 
   habitIds.map((id) => {
     const chainComp = (
@@ -41,7 +41,7 @@ export default function HabitGrid() {
         throttledSaveDates={throttledSaveDates}
       ></HabitChain>
     );
-    timePeriods.push(chainComp);
+    habitElements.push(chainComp);
   });
 
   return (
@@ -53,7 +53,7 @@ export default function HabitGrid() {
       <h1 className="App-header">Momentum</h1>
       <div className="chains-container">
         <TitleBar dates={displayedDates}></TitleBar>
-        {timePeriods}
+        {habitElements}
         <CreateHabit></CreateHabit>
       </div>
     </div>

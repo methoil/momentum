@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './css/crate-habit.scss';
 import '../App.scss';
 import { useDispatch } from 'react-redux';
+import { createHabitRequest } from '../redux/actions/habit-actions';
 
 export const CreateHabit: React.FC = () => {
   const dispatch = useDispatch();
@@ -19,9 +20,14 @@ export const CreateHabit: React.FC = () => {
               type="text"
               className="new-habit-name-input"
               onChange={(e) => setHabitName(e.target.value)}
-              onKeyDown={onInputNewHabit}
+              onKeyUp={onInputNewHabit}
             />
-            <button className="new-habit-cancel-input-button" onClick={() => setShowInput(false)}>Cancel</button>
+            <button
+              className="new-habit-cancel-input-button"
+              onClick={() => setShowInput(false)}
+            >
+              Cancel
+            </button>
           </div>
         ) : (
           <div
@@ -37,7 +43,7 @@ export const CreateHabit: React.FC = () => {
 
   function onInputNewHabit(event: React.KeyboardEvent) {
     if (event.keyCode === 13) {
-      // dispatch();
+      dispatch(createHabitRequest(habitName));
     }
   }
 };

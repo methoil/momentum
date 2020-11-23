@@ -17,10 +17,51 @@ interface IToggleLinkPayload {
   index: number;
 }
 
+interface ICrateHabitPayload {
+  name: string;
+  history: boolean[];
+  _id: string;
+  dirty: boolean;
+}
+
 export const ToggleLinkAction = (payload: IToggleLinkPayload) => {
   return {
     type: AppEvents.TOGGLE_DATE,
     payload,
+  };
+};
+
+export const CreateHabitAction = (payload: ICrateHabitPayload) => {
+  return {
+    type: AppEvents.CREATE_HABIT,
+    payload,
+  };
+};
+
+export const createHabitRequest = (
+  habitName: string
+): ThunkAction<void, IState, unknown, Action<string>> => {
+  return async function (dispatch, getState) {
+    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits`, {
+      method: 'POST',
+      headers: {
+        Authorization: getState().user.token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: habitName,
+        history: [],
+      }),
+    });
+    const serverData: any = await res.json();
+
+    const createHabitPayload = {
+      name: habitName,
+      history: [],
+      _id: serverData._id,
+      dirty: false,
+    };
+    dispatch(CreateHabitAction(createHabitPayload));
   };
 };
 
@@ -88,10 +129,10 @@ export const loadDatesFromServer = (
 };
 
 const transtlateDatesToView = (
-  mockData: IServerHabitData[],
+  serverData: IServerHabitData[],
   displayedDates: DateStr[]
 ): IHabit[] => {
-  return mockData.map((habit) => {
+  return serverData.map((habit) => {
     const { name, _id } = habit;
     const history = habit.history;
 
@@ -125,6 +166,7 @@ type IActionUnion<A extends IStringMap<IAnyFunction>> = ReturnType<A[keyof A]>;
 const actions = {
   LoadDatesAction,
   ToggleLinkAction,
+  CreateHabitAction,
 };
 
 export type IAction = IActionUnion<typeof actions>;

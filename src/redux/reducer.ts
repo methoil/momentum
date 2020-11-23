@@ -45,6 +45,13 @@ export const reducer = (
   switch (action.type) {
     case AppEvents.LOAD_DATES:
       return Object.assign(state, action.payload);
+
+    case AppEvents.CREATE_HABIT:
+      const newHistory = [...state.habitHistory];
+      newHistory.push(action.payload);
+      state.habitHistory = newHistory;
+      return state;
+
     case AppEvents.TOGGLE_DATE:
       const { id, index } = action.payload;
       const habitIdx = state.habitHistory.findIndex(
