@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './css/crate-habit.scss';
 import '../App.scss';
 import { useDispatch } from 'react-redux';
@@ -9,6 +9,12 @@ export const CreateHabit: React.FC = () => {
   const [showInput, setShowInput] = useState(false);
   const [habitName, setHabitName] = useState('');
   const inputNameEl = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (showInput) {
+      inputNameEl?.current?.focus();
+    }
+  }, [showInput]);
 
   return (
     <div className="create-habit-container">
