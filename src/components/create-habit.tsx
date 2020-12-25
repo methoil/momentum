@@ -3,6 +3,7 @@ import './css/crate-habit.scss';
 import '../App.scss';
 import { useDispatch } from 'react-redux';
 import { createHabitRequest } from '../redux/actions/habit-actions';
+import Button from '@material-ui/core/Button';
 
 export const CreateHabit: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,12 +32,12 @@ export const CreateHabit: React.FC = () => {
               onChange={(e) => setHabitName(e.target.value)}
               onKeyUp={onInputNewHabit}
             />
-            <button
+            <Button
               className="new-habit-cancel-input-button"
               onClick={() => setShowInput(false)}
             >
               Cancel
-            </button>
+            </Button>
           </div>
         ) : (
           <div className="new-habit-plus-char" onClick={onClickPlusIcon}>
