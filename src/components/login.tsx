@@ -8,6 +8,7 @@ import {
 import { IState, IUser } from '../redux/reducer';
 import '../App.scss';
 import './css/login.scss';
+import Button from '@material-ui/core/Button';
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -41,9 +42,9 @@ export default function Login() {
             <div></div>
             <h3>{creatingUser ? 'Create Account' : 'Login'}</h3>
             <div>
-              <button onClick={() => setCreatingUser(!creatingUser)}>
+              <Button onClick={() => setCreatingUser(!creatingUser)}>
                 {creatingUser ? 'Login instead' : 'Create new user'}
-              </button>
+              </Button>
             </div>
           </div>
           <div className={'login-form-containers app-text'}>
@@ -73,7 +74,7 @@ export default function Login() {
             </div>
           </div>
           <div>
-            <button onClick={submitForms}>Submit</button>
+            <Button onClick={submitForms}>Submit</Button>
           </div>
         </div>
       </div>

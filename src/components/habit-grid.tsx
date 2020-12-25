@@ -11,6 +11,7 @@ import { TitleBar } from './dates-title-bar';
 import { HabitChain } from './habit-chain';
 import { CreateHabit } from './create-habit';
 import './css/habit-grid.scss';
+import Button from '@material-ui/core/Button';
 import { generateDisplayedDates } from '../services/date-utils';
 import { logoutUser } from '../redux/actions/user-actions';
 
@@ -48,7 +49,7 @@ export default function HabitGrid() {
     <div>
       <div className="grid-login-logout-info app-text">
         <p>Logged in as {username}</p>
-        <button onClick={() => dispatch(logoutUser())}>Loggout</button>
+        <Button onClick={() => dispatch(logoutUser())}>Loggout</Button>
       </div>
       <h1 className="App-header">Momentum</h1>
       <div className="chains-container">
