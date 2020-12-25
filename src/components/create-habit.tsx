@@ -4,6 +4,7 @@ import '../App.scss';
 import { useDispatch } from 'react-redux';
 import { createHabitRequest } from '../redux/actions/habit-actions';
 import Button from '@material-ui/core/Button';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 export const CreateHabit: React.FC = () => {
   const dispatch = useDispatch();
@@ -40,10 +41,10 @@ export const CreateHabit: React.FC = () => {
             </Button>
           </div>
         ) : (
-          <div className="new-habit-plus-char" onClick={onClickPlusIcon}>
-            +
-          </div>
-        )}
+            <Button className="new-habit-plus-button" onClick={onClickPlusIcon}>
+              <AddCircleOutlineIcon style={{ fontSize: '9rem' }}></AddCircleOutlineIcon>
+            </Button>
+          )}
       </div>
     </div>
   );
