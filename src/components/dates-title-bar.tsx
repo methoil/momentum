@@ -1,4 +1,5 @@
 import React from "react";
+import Tooltip from '@material-ui/core/Tooltip';
 import "./css/dates-title-bar.scss";
 
 interface IProps {
@@ -19,9 +20,11 @@ export const TitleBar: React.FC<IProps> = ({ dates }) => {
 
     const monthYearLabel = `${month} ${year}`;
     return (
-      <div>
+      <div className="date-label-container">
         <div className="date-string-in-title">{idx === 0 || dates[idx - 1].split('-')[1] !== `${monthNum}` ? monthYearLabel : ` `}</div>
-        <div className="date-string-in-title" key={date}>{`${dayOfWeek} ${dayOfMonth}`}</div>
+        <Tooltip title={monthYearLabel}>
+          <div className="date-string-in-title" key={date}>{`${dayOfWeek} ${dayOfMonth}`}</div>
+        </Tooltip>
       </div>
     );
   });
