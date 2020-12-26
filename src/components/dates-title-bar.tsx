@@ -20,10 +20,10 @@ export const TitleBar: React.FC<IProps> = ({ dates }) => {
 
     const monthYearLabel = `${month} ${year}`;
     return (
-      <div className="date-label-container">
+      <div key={date} className="date-label-container">
         <div className="date-string-in-title">{idx === 0 || dates[idx - 1].split('-')[1] !== `${monthNum}` ? monthYearLabel : ` `}</div>
         <Tooltip title={monthYearLabel}>
-          <div className="date-string-in-title" key={date}>{`${dayOfWeek} ${dayOfMonth}`}</div>
+          <div className="date-string-in-title">{`${dayOfWeek} ${dayOfMonth}`}</div>
         </Tooltip>
       </div>
     );

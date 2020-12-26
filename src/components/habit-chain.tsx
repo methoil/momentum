@@ -1,6 +1,5 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuid } from "uuid";
 
 // import "./habit-chain.scss";
 import Link from "./link";
@@ -37,6 +36,7 @@ export const HabitChain: React.FC<IProps> = ({
         active={combined[i]}
         callback={onToggleLink(habitMeta._id, i)}
         date={displayedDates[i]}
+        index={i}
         key={`${habitMeta._id}-${displayedDates[i]}`}
       ></Link>
     );
