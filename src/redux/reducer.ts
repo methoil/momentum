@@ -53,7 +53,7 @@ export const reducer = (
       return state;
 
     case AppEvents.REMOVE_HABIT:
-      state.habitHistory = state.habitHistory.filter(habit => habit._id !== action.payload.id);
+      state.habitHistory = state.habitHistory.filter(habit => habit._id !== action.payload._id);
       return state;
 
     case AppEvents.TOGGLE_DATE:

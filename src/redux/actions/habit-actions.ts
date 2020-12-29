@@ -78,7 +78,7 @@ export const createHabitRequest = (
 
 export const removeHabitRequest = (_id: string): ThunkAction<void, IState, unknown, Action<string>> => {
   return async function (dispatch, getState) {
-    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits/?id=${_id}`, {
+    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits/${_id}`, {
       method: 'DELETE',
       headers: {
         Authorization: getState().user.token,
