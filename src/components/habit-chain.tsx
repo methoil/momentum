@@ -28,7 +28,7 @@ export const HabitChain: React.FC<IProps> = ({
 
   const links = [];
   // for mock, started 10 days ago
-  links.push(<HabitCard name={habitMeta.name} key={habitMeta._id}></HabitCard>);
+  links.push(<HabitCard name={habitMeta.name} _id={habitMeta._id} key={habitMeta._id}></HabitCard>);
 
   for (let i = 0; i < combined.length; i++) {
     links.push(
