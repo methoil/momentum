@@ -24,6 +24,10 @@ interface ICrateHabitPayload {
   dirty: boolean;
 }
 
+interface IRemoveHabitPayload {
+  _id: string;
+}
+
 export const ToggleLinkAction = (payload: IToggleLinkPayload) => {
   return {
     type: AppEvents.TOGGLE_DATE,
@@ -37,6 +41,13 @@ export const CreateHabitAction = (payload: ICrateHabitPayload) => {
     payload,
   };
 };
+
+export const RemoveHabitAction = (payload: IRemoveHabitPayload) => {
+  return {
+    type: AppEvents.REMOVE_HABIT,
+    payload,
+  }
+}
 
 export const createHabitRequest = (
   habitName: string
@@ -63,6 +74,19 @@ export const createHabitRequest = (
     };
     dispatch(CreateHabitAction(createHabitPayload));
   };
+};
+
+export const removeHabitRequest = (_id: string): ThunkAction<void, IState, unknown, Action<string>> => {
+  return async function (dispatch, getState) {
+    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits/?id=${_id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: getState().user.token,
+        'Content-Type': 'application/json',
+      },
+    });
+    dispatch(RemoveHabitAction({ _id }));
+  }
 };
 
 interface ILoadHabitsPayload {

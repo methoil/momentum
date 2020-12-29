@@ -52,6 +52,10 @@ export const reducer = (
       state.habitHistory = newHistory;
       return state;
 
+    case AppEvents.REMOVE_HABIT:
+      state.habitHistory = state.habitHistory.filter(habit => habit._id !== action.payload.id);
+      return state;
+
     case AppEvents.TOGGLE_DATE:
       const { id, index } = action.payload;
       const habitIdx = state.habitHistory.findIndex(
