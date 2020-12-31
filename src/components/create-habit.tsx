@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import './css/crate-habit.scss';
 import '../App.scss';
 import { useDispatch } from 'react-redux';
-import { createHabitRequest } from '../redux/actions/habit-actions';
+import { createHabitRequest } from '../redux/actions/habit-thunks';
 import Button from '@material-ui/core/Button';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 

@@ -10,7 +10,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import { useDispatch } from 'react-redux';
-import { removeHabitRequest } from '../redux/actions/habit-actions';
+import { removeHabitRequest } from '../redux/actions/habit-thunks';
 
 interface IProps {
   name: string;

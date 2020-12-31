@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   loadDatesFromServer,
   saveDatesToServer,
-} from '../redux/actions/habit-actions';
+} from '../redux/actions/habit-thunks';
 
 import { IState } from '../redux/reducer';
 import { TitleBar } from './dates-title-bar';
