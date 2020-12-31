@@ -9,7 +9,7 @@ import { IState, IUser } from '../redux/reducer';
 import '../App.scss';
 import './css/login.scss';
 import Button from '@material-ui/core/Button';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -18,9 +18,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const [goToDashboard, setGoToDashboard] = useState(false);
-
-
+  const browserHistory = useHistory();
 
   useEffect(() => {
     const attemptLogin = async () => {
@@ -56,6 +54,9 @@ export default function Login() {
           <div>
             <Button onClick={() => setCreatingUser(!creatingUser)}>
               {creatingUser ? 'Login instead' : 'Create new user'}
+            </Button>
+            <Button onClick={() => browserHistory.push('/Dashboard')}>
+              Try Without Account
             </Button>
           </div>
         </div>

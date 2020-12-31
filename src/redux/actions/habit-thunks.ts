@@ -75,6 +75,10 @@ export const removeHabitRequest = (_id: string): ThunkAction<void, IState, unkno
       });
     } else {
       localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}${_id}`);
+      const newHabitIds = getState().habitHistory
+        .filter(habit => habit._id !== _id)
+        .map(habit => habit._id);
+      localStorage.setItem(LOCAL_STORAGE_HABIT_IDS, JSON.stringify(newHabitIds));
     }
     dispatch(RemoveHabitAction({ _id }));
   }
@@ -139,7 +143,10 @@ export const loadDatesFromServer = (
       if (Array.isArray(habitIds)) {
         const storedData: IHabitMeta[] = [];
         habitIds?.forEach(id => {
-          storedData.push(JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_PREFIX}${id}`) || '[]'));
+          const storedHabitMeta = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}${id}`);
+          if (storedHabitMeta) {
+            storedData.push(JSON.parse(storedHabitMeta));
+          }
         });
         habitHistory = transtlateDatesToView(storedData, displayedDates);
       } else {
@@ -156,10 +163,10 @@ export const loadDatesFromServer = (
 };
 
 const transtlateDatesToView = (
-  serverData: IServerHabitData[],
+  storedData: Array <IServerHabitData | IHabitMeta>,
   displayedDates: DateStr[]
 ): IHabit[] => {
-  return serverData.map((habit) => {
+  return storedData.map((habit) => {
     const { name, _id } = habit;
     const history = habit.history;
 
