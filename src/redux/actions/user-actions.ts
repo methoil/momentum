@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { AppEvents } from '../events';
