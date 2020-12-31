@@ -131,7 +131,7 @@ export const createUser = (
       };
       dispatch(SetUserInfoAction(payload));
       localStorage.setItem('BEARER_TOKEN', payload.token);
-    } catch (error) {}
+    } catch (error) { }
   };
 };
 
@@ -142,22 +142,24 @@ export const logoutUser = (): ThunkAction<
   Action<string>
 > => {
   return async (dispatch, getState) => {
-    const logoutPromise = await fetch(
-      `${process.env.REACT_APP_SERVER_URL}/users/logout`,
-      {
-        method: 'POST',
-        headers: { Authorization: getState().user.token },
-      }
-    );
-    // const res = await logoutPromise.json();
-    if (logoutPromise.status > 210 || logoutPromise.status < 200) {
-      return Promise.reject(logoutPromise.statusText);
-    }
-
-    localStorage.removeItem('BEARER_TOKEN');
-    dispatch(ResetUserInfoAction());
-
     try {
-    } catch (error) {}
+      const logoutPromise = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/users/logout`,
+        {
+          method: 'POST',
+          headers: { Authorization: getState().user.token },
+        }
+      );
+      // const res = await logoutPromise.json();
+      if (logoutPromise.status > 210 || logoutPromise.status < 200) {
+        return Promise.reject(logoutPromise.statusText);
+      }
+
+      localStorage.removeItem('BEARER_TOKEN');
+      return dispatch(ResetUserInfoAction());
+    } catch (error) {
+      console.error('error logging out');
+      return Promise.reject(error);
+    }
   };
 };
