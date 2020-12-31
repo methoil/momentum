@@ -1,5 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-import { IServerHabitData } from '../../habits.model';
+import {  IServerHabitData } from '../../habits.model';
 import { Action } from 'redux';
 import { ToggleLinkAction, CreateHabitAction, RemoveHabitAction, LoadDatesAction } from './habit-actions';
 import { IHabit, IState } from '../reducer';
@@ -8,11 +8,21 @@ import { v4 } from 'uuid';
 const LOCAL_STORAGE_PREFIX = 'MOMENTUM_HABIT_DATA_';
 const LOCAL_STORAGE_HABIT_IDS = 'MOMENTUM_HABIT_IDS';
 
+interface INewHabitMeta {
+  name: string;
+  history: DateStr[];
+  _id?: string;
+}
+
 export const createHabitRequest = (
   habitName: string
 ): ThunkAction<void, IState, unknown, Action<string>> => {
   return async function (dispatch, getState) {
-    let habitId: string;
+    let _id: string;
+    const habitMeta: INewHabitMeta = {
+      name: habitName,
+      history: [],
+    };
     if (getState().user.loggedIn) {
       const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits`, {
         method: 'POST',
@@ -20,22 +30,23 @@ export const createHabitRequest = (
           Authorization: getState().user.token,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          name: habitName,
-          history: [],
-        }),
+        body: JSON.stringify(habitMeta),
       });
       const serverData: any = await res.json();
-      habitId = serverData._id;
+      _id = serverData._id;
     } else {
-      habitId = v4();
-      localStorage.setItem(`${LOCAL_STORAGE_PREFIX}${habitId}`, `[]`);
+      _id = v4();
+      habitMeta._id = _id;
+      localStorage.setItem(`${LOCAL_STORAGE_PREFIX}${_id}`, JSON.stringify(habitMeta));
+      const habitIds: string[] = getState().habitHistory.map(habit => habit._id);
+      habitIds.push(_id);
+      localStorage.setItem(`${LOCAL_STORAGE_HABIT_IDS}`, JSON.stringify(habitIds));
     }
 
     const createHabitPayload = {
       name: habitName,
       history: new Array(getState().displayedDates.length).fill(false),
-      _id: habitId,
+      _id,
       dirty: false,
     };
     dispatch(CreateHabitAction(createHabitPayload));
@@ -110,9 +121,13 @@ export const loadDatesFromServer = (
     }
     else {
       const habitIds: string[] = JSON.parse(localStorage.getItem(LOCAL_STORAGE_HABIT_IDS) || '[]');
-      habitIds.forEach(id => {
-        habitHistory.push(JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_PREFIX}${id}`) || '[]'));
-      });
+      if (Array.isArray(habitIds)) {
+        habitIds?.forEach(id => {
+          habitHistory.push(JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_PREFIX}${id}`) || '[]'));
+        });
+      } else {
+        console.error('Invalid data is present in local storage for habit ids');
+      }
     }
     const loadAppPayload = {
       ownerId: getState().user.userId, // TODO: set this properly

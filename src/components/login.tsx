@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   autoLoginFromBearer,
@@ -9,6 +9,7 @@ import { IState, IUser } from '../redux/reducer';
 import '../App.scss';
 import './css/login.scss';
 import Button from '@material-ui/core/Button';
+import { Redirect } from 'react-router-dom';
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -17,15 +18,24 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [goToDashboard, setGoToDashboard] = useState(false);
 
-  let bearerToken = localStorage.getItem('BEARER_TOKEN');
-  if (bearerToken && !user.loggedIn) {
-    try {
-      dispatch(autoLoginFromBearer(bearerToken));
-    } catch (error) {
-      localStorage.removeItem('BEARER_TOKEN');
+
+
+  useEffect(() => {
+    const attemptLogin = async () => {
+      let bearerToken = localStorage.getItem('BEARER_TOKEN');
+      if (bearerToken && !user.loggedIn) {
+        try {
+          await dispatch(autoLoginFromBearer(bearerToken));
+          // setGoToDashboard(true);
+        } catch (error) {
+          localStorage.removeItem('BEARER_TOKEN');
+        }
+      }
     }
-  }
+    attemptLogin();
+  }, []);
 
   function submitForms() {
     creatingUser
@@ -33,53 +43,52 @@ export default function Login() {
       : dispatch(loginUser(email, password));
   }
 
-  if (!user.loggedIn) {
-    return (
-      <div className={'login-container app-text'}>
-        <h1 className="App-header">Momentum</h1>
-        <div className={'login-controls-box'}>
-          <div className="login-control-box-header">
-            <div></div>
-            <h3>{creatingUser ? 'Create Account' : 'Login'}</h3>
-            <div>
-              <Button onClick={() => setCreatingUser(!creatingUser)}>
-                {creatingUser ? 'Login instead' : 'Create new user'}
-              </Button>
-            </div>
-          </div>
-          <div className={'login-form-containers app-text'}>
-            {creatingUser ? (
-              <div>
-                <div className={'login-form-label'}>Username:</div>
-                <input
-                  type="text"
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              </div>
-            ) : (
-              ''
-            )}
-            <div>
-              <div className={'login-form-label'}>
-                <label>Email</label>:
-              </div>
-              <input type="email" onChange={(e) => setEmail(e.target.value)} />
-            </div>
-            <div>
-              <div className={'login-form-label'}>Password:</div>
-              <input
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </div>
+  if (goToDashboard || user.loggedIn)
+    <Redirect to="/dashboard"></Redirect>
+
+  return (
+    <div className={'login-container app-text'}>
+      <h1 className="App-header">Momentum</h1>
+      <div className={'login-controls-box'}>
+        <div className="login-control-box-header">
+          <div></div>
+          <h3>{creatingUser ? 'Create Account' : 'Login'}</h3>
           <div>
-            <Button onClick={submitForms}>Submit</Button>
+            <Button onClick={() => setCreatingUser(!creatingUser)}>
+              {creatingUser ? 'Login instead' : 'Create new user'}
+            </Button>
           </div>
         </div>
+        <div className={'login-form-containers app-text'}>
+          {creatingUser ? (
+            <div>
+              <div className={'login-form-label'}>Username:</div>
+              <input
+                type="text"
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+          ) : (
+              ''
+            )}
+          <div>
+            <div className={'login-form-label'}>
+              <label>Email</label>:
+              </div>
+            <input type="email" onChange={(e) => setEmail(e.target.value)} />
+          </div>
+          <div>
+            <div className={'login-form-label'}>Password:</div>
+            <input
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+        </div>
+        <div>
+          <Button onClick={submitForms}>Submit</Button>
+        </div>
       </div>
-    );
-  } else {
-    return <div className={'app-text'}>Logged in as {user.username}</div>;
-  }
+    </div>
+  );
 }

@@ -48,7 +48,7 @@ export const autoLoginFromBearer = (
         loggedIn: true,
       };
 
-      dispatch(SetUserInfoAction(payload));
+      return dispatch(SetUserInfoAction(payload));
     } catch (error) {
       localStorage.removeItem('BEARER_TOKEN');
       return Promise.reject(error);

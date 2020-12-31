@@ -2,15 +2,23 @@ import React, { useEffect } from 'react';
 import './App.scss';
 import HabitGrid from './components/habit-grid';
 import Login from './components/login';
-import { useSelector } from 'react-redux';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import { IState } from './redux/reducer';
 
 function App() {
-  const loggedIn: boolean = useSelector((state: IState) => state.user.loggedIn);
-
   return (
     <div className={'App'}>
-      {loggedIn ? <HabitGrid></HabitGrid> : <Login></Login>}
+      <Router>
+        <Route exact path="/">
+          <Login></Login>
+        </Route>
+        <Route path="/login">
+          <Login></Login>
+        </Route>
+        <Route path="/dashboard">
+        <HabitGrid></HabitGrid>
+        </Route>
+      </Router>
     </div>
   );
 }
