@@ -1,5 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-import {  IServerHabitData } from '../../habits.model';
+import { IHabitMeta, IServerHabitData } from '../../habits.model';
 import { Action } from 'redux';
 import { ToggleLinkAction, CreateHabitAction, RemoveHabitAction, LoadDatesAction } from './habit-actions';
 import { IHabit, IState } from '../reducer';
@@ -12,6 +12,16 @@ interface INewHabitMeta {
   name: string;
   history: DateStr[];
   _id?: string;
+}
+
+interface IServerHabitRes {
+  createdAt: string;
+  history: DateStr[];
+  name: string;
+  owner: string;
+  updatedAt: string;
+  __v: number;
+  _id: string;
 }
 
 export const createHabitRequest = (
@@ -101,7 +111,12 @@ export function saveDatesToServer(): ThunkAction<
     } else {
       dirtyHabits.forEach((habit) => {
         const history = dates.filter((date, i) => habit.history[i]);
-        localStorage.setItem(`${LOCAL_STORAGE_PREFIX}${habit._id}`, JSON.stringify({ history }));
+        const storedData: IHabitMeta = {
+          name: habit.name,
+          _id: habit._id,
+          history,
+        }
+        localStorage.setItem(`${LOCAL_STORAGE_PREFIX}${habit._id}`, JSON.stringify(storedData));
       });
     }
   };
@@ -116,15 +131,17 @@ export const loadDatesFromServer = (
       const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits`, {
         headers: { Authorization: getState().user.token },
       });
-      const serverData: any = await res.json();
+      const serverData: IServerHabitRes[] = await res.json();
       habitHistory = transtlateDatesToView(serverData, displayedDates);
     }
     else {
       const habitIds: string[] = JSON.parse(localStorage.getItem(LOCAL_STORAGE_HABIT_IDS) || '[]');
       if (Array.isArray(habitIds)) {
+        const storedData: IHabitMeta[] = [];
         habitIds?.forEach(id => {
-          habitHistory.push(JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_PREFIX}${id}`) || '[]'));
+          storedData.push(JSON.parse(localStorage.getItem(`${LOCAL_STORAGE_PREFIX}${id}`) || '[]'));
         });
+        habitHistory = transtlateDatesToView(storedData, displayedDates);
       } else {
         console.error('Invalid data is present in local storage for habit ids');
       }

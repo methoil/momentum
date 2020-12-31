@@ -43,8 +43,8 @@ export default function Login() {
       : dispatch(loginUser(email, password));
   }
 
-  if (goToDashboard || user.loggedIn)
-    <Redirect to="/dashboard"></Redirect>
+  if (user.loggedIn)
+    return <Redirect to="/dashboard"></Redirect>
 
   return (
     <div className={'login-container app-text'}>
