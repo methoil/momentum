@@ -1,52 +1,29 @@
 import { ThunkAction } from 'redux-thunk';
-import { IHabitMeta, IServerHabitData } from '../../habits.model';
+import { IHabitMeta } from '../../habits.model';
 import { Action } from 'redux';
 import { ToggleLinkAction, CreateHabitAction, RemoveHabitAction, LoadDatesAction } from './habit-actions';
 import { IHabit, IState } from '../reducer';
-import { DateStr } from '../../services/date-utils';
+import { DateStr, transtlateDatesToView } from '../../services/date-utils';
 import { v4 } from 'uuid';
+import { createHabitOnServer, loadHabitsFromServer, removeHabitFromServer, saveHabitsToServer } from './habit-server-requests';
 const LOCAL_STORAGE_PREFIX = 'MOMENTUM_HABIT_DATA_';
 const LOCAL_STORAGE_HABIT_IDS = 'MOMENTUM_HABIT_IDS';
 
-interface INewHabitMeta {
-  name: string;
-  history: DateStr[];
-  _id?: string;
-}
-
-interface IServerHabitRes {
-  createdAt: string;
-  history: DateStr[];
-  name: string;
-  owner: string;
-  updatedAt: string;
-  __v: number;
-  _id: string;
-}
-
-export const createHabitRequest = (
+export const createHabit = (
   habitName: string
 ): ThunkAction<void, IState, unknown, Action<string>> => {
   return async function (dispatch, getState) {
     let _id: string;
-    const habitMeta: INewHabitMeta = {
-      name: habitName,
-      history: [],
-    };
+
     if (getState().user.loggedIn) {
-      const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits`, {
-        method: 'POST',
-        headers: {
-          Authorization: getState().user.token,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(habitMeta),
-      });
-      const serverData: any = await res.json();
-      _id = serverData._id;
+      _id = await createHabitOnServer(habitName, getState().user.token);
     } else {
-      _id = v4();
-      habitMeta._id = _id;
+      _id = v4()
+      const habitMeta = {
+        name: habitName,
+        history: [],
+        _id,
+      }
       localStorage.setItem(`${LOCAL_STORAGE_PREFIX}${_id}`, JSON.stringify(habitMeta));
       const habitIds: string[] = getState().habitHistory.map(habit => habit._id);
       habitIds.push(_id);
@@ -63,16 +40,10 @@ export const createHabitRequest = (
   };
 };
 
-export const removeHabitRequest = (_id: string): ThunkAction<void, IState, unknown, Action<string>> => {
+export const removeHabit = (_id: string): ThunkAction<void, IState, unknown, Action<string>> => {
   return async function (dispatch, getState) {
     if (getState().user.loggedIn) {
-      const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits/${_id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: getState().user.token,
-          'Content-Type': 'application/json',
-        },
-      });
+      await removeHabitFromServer(_id, getState().user.token);
     } else {
       localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}${_id}`);
       const newHabitIds = getState().habitHistory
@@ -84,7 +55,7 @@ export const removeHabitRequest = (_id: string): ThunkAction<void, IState, unkno
   }
 };
 
-export function saveDatesToServer(): ThunkAction<
+export function updateHabits(): ThunkAction<
   void,
   IState,
   unknown,
@@ -95,26 +66,14 @@ export function saveDatesToServer(): ThunkAction<
     const dates = getState().displayedDates;
     if (getState().user.loggedIn) {
       try {
-        const requests = dirtyHabits.map((habit) => {
-          const history = dates.filter((date, i) => habit.history[i]);
-          fetch(`${process.env.REACT_APP_SERVER_URL}/habits/${habit._id}`, {
-            method: 'PATCH',
-            headers: {
-              Authorization: getState().user.token,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ history }),
-          });
-        });
-
-        await Promise.all(requests);
+        await saveHabitsToServer(dirtyHabits, dates, getState().user.token);
       }
       catch (error) {
         console.error('error saving habits', error);
       }
     } else {
       dirtyHabits.forEach((habit) => {
-        const history = dates.filter((date, i) => habit.history[i]);
+        const history: DateStr[] = dates.filter((date, i) => habit.history[i]);
         const storedData: IHabitMeta = {
           name: habit.name,
           _id: habit._id,
@@ -126,17 +85,13 @@ export function saveDatesToServer(): ThunkAction<
   };
 }
 
-export const loadDatesFromServer = (
+export const loadHabits = (
   displayedDates: DateStr[]
 ): ThunkAction<void, IState, unknown, Action<string>> => {
   return async function (dispatch, getState) {
     let habitHistory: IHabit[] = [];
     if (getState().user.loggedIn) {
-      const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/habits`, {
-        headers: { Authorization: getState().user.token },
-      });
-      const serverData: IServerHabitRes[] = await res.json();
-      habitHistory = transtlateDatesToView(serverData, displayedDates);
+      habitHistory = await loadHabitsFromServer(displayedDates, getState().user.token)
     }
     else {
       const habitIds: string[] = JSON.parse(localStorage.getItem(LOCAL_STORAGE_HABIT_IDS) || '[]');
@@ -162,24 +117,3 @@ export const loadDatesFromServer = (
   };
 };
 
-const transtlateDatesToView = (
-  storedData: Array <IServerHabitData | IHabitMeta>,
-  displayedDates: DateStr[]
-): IHabit[] => {
-  return storedData.map((habit) => {
-    const { name, _id } = habit;
-    const history = habit.history;
-
-    let habitDateIdx = 0;
-    const combined = new Array(displayedDates.length);
-    for (let i = 0; i < displayedDates.length; i++) {
-      if (displayedDates[i] === history[habitDateIdx]) {
-        combined[i] = true;
-        habitDateIdx++;
-      } else {
-        combined[i] = false;
-      }
-    }
-    return { name, _id, history: combined, dirty: false };
-  });
-};

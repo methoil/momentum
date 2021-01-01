@@ -10,7 +10,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import { useDispatch } from 'react-redux';
-import { removeHabitRequest } from '../redux/actions/habit-thunks';
+import { removeHabit } from '../redux/actions/habit-thunks';
 
 interface IProps {
   name: string;
@@ -23,7 +23,7 @@ const RemoveHabitConfirmationDialog: React.FC<IProps> = ({ name, _id }) => {
 
   const onClose = () => setOpen(false);
   const onConfirm = () => {
-    dispatch(removeHabitRequest(_id));
+    dispatch(removeHabit(_id));
     onClose();
   }
 

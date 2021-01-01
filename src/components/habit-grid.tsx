@@ -3,8 +3,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
-  loadDatesFromServer,
-  saveDatesToServer,
+  loadHabits,
+  updateHabits,
 } from '../redux/actions/habit-thunks';
 
 import { IState, IUser } from '../redux/reducer';
@@ -23,13 +23,13 @@ export default function HabitGrid() {
   const user: IUser = useSelector((state: IState) => state.user);
   useEffect(() => {
     const displayedDates = generateDisplayedDates(30);
-    dispatch(loadDatesFromServer(displayedDates));
+    dispatch(loadHabits(displayedDates));
   }, []);
 
   const browserHistory = useHistory();
   const dispatch = useDispatch();
   const throttledSaveDates = throttle(
-    () => dispatch(saveDatesToServer()),
+    () => dispatch(updateHabits()),
     5000
   );
 
