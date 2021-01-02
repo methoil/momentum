@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   autoLoginFromBearer,
@@ -10,30 +10,18 @@ import '../App.scss';
 import './css/login.scss';
 import Button from '@material-ui/core/Button';
 import { Redirect, useHistory } from 'react-router-dom';
+import useAttemptLogin from '../hooks/useAttemptLogin';
 
 export default function Login() {
-  const dispatch = useDispatch();
-  const user: IUser = useSelector((state: IState) => state.user);
+  const dispatch = useDispatch();  
   const [creatingUser, setCreatingUser] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const browserHistory = useHistory();
 
-  useEffect(() => {
-    const attemptLogin = async () => {
-      let bearerToken = localStorage.getItem('BEARER_TOKEN');
-      if (bearerToken && !user.loggedIn) {
-        try {
-          await dispatch(autoLoginFromBearer(bearerToken));
-          // setGoToDashboard(true);
-        } catch (error) {
-          localStorage.removeItem('BEARER_TOKEN');
-        }
-      }
-    }
-    attemptLogin();
-  }, []);
+  const user: IUser = useSelector((state: IState) => state.user);
+  useAttemptLogin(user);
 
   function submitForms() {
     creatingUser

@@ -1,9 +1,8 @@
 import { throttle } from '../services/utils';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import {
-  loadHabits,
   updateHabits,
 } from '../redux/actions/habit-thunks';
 
@@ -13,18 +12,15 @@ import { HabitChain } from './habit-chain';
 import { CreateHabit } from './create-habit';
 import './css/habit-grid.scss';
 import Button from '@material-ui/core/Button';
-import { generateDisplayedDates } from '../services/date-utils';
-import { loginUser, logoutUser } from '../redux/actions/user-actions';
+import { logoutUser } from '../redux/actions/user-actions';
+import useAttemptLogin from '../hooks/useAttemptLogin';
 
 export default function HabitGrid() {
   const habitIds = useSelector((state: IState) => state.habitHistory).map(
     (habit) => habit._id
   );
   const user: IUser = useSelector((state: IState) => state.user);
-  useEffect(() => {
-    const displayedDates = generateDisplayedDates(30);
-    dispatch(loadHabits(displayedDates));
-  }, []);
+  useAttemptLogin(user, true);
 
   const browserHistory = useHistory();
   const dispatch = useDispatch();
