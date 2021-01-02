@@ -1,13 +1,11 @@
 import { ThunkAction } from 'redux-thunk';
-import { IHabitMeta } from '../../habits.model';
 import { Action } from 'redux';
-import { ToggleLinkAction, CreateHabitAction, RemoveHabitAction, LoadDatesAction } from './habit-actions';
+import { CreateHabitAction, RemoveHabitAction, LoadDatesAction } from './habit-actions';
 import { IHabit, IState } from '../reducer';
-import { DateStr, transtlateDatesToView } from '../../services/date-utils';
-import { v4 } from 'uuid';
+import { DateStr } from '../../services/date-utils';
 import { createHabitOnServer, loadHabitsFromServer, removeHabitFromServer, saveHabitsToServer } from './habit-server-requests';
-const LOCAL_STORAGE_PREFIX = 'MOMENTUM_HABIT_DATA_';
-const LOCAL_STORAGE_HABIT_IDS = 'MOMENTUM_HABIT_IDS';
+import { createLocalHabit, loadLocalHabits, removeLocalHabit, updateLocalHabits } from './habit-local-storage';
+
 
 export const createHabit = (
   habitName: string
@@ -18,16 +16,7 @@ export const createHabit = (
     if (getState().user.loggedIn) {
       _id = await createHabitOnServer(habitName, getState().user.token);
     } else {
-      _id = v4()
-      const habitMeta = {
-        name: habitName,
-        history: [],
-        _id,
-      }
-      localStorage.setItem(`${LOCAL_STORAGE_PREFIX}${_id}`, JSON.stringify(habitMeta));
-      const habitIds: string[] = getState().habitHistory.map(habit => habit._id);
-      habitIds.push(_id);
-      localStorage.setItem(`${LOCAL_STORAGE_HABIT_IDS}`, JSON.stringify(habitIds));
+      _id  = createLocalHabit(habitName, getState().habitHistory);
     }
 
     const createHabitPayload = {
@@ -45,11 +34,7 @@ export const removeHabit = (_id: string): ThunkAction<void, IState, unknown, Act
     if (getState().user.loggedIn) {
       await removeHabitFromServer(_id, getState().user.token);
     } else {
-      localStorage.removeItem(`${LOCAL_STORAGE_PREFIX}${_id}`);
-      const newHabitIds = getState().habitHistory
-        .filter(habit => habit._id !== _id)
-        .map(habit => habit._id);
-      localStorage.setItem(LOCAL_STORAGE_HABIT_IDS, JSON.stringify(newHabitIds));
+      removeLocalHabit(_id, getState().habitHistory)
     }
     dispatch(RemoveHabitAction({ _id }));
   }
@@ -72,15 +57,7 @@ export function updateHabits(): ThunkAction<
         console.error('error saving habits', error);
       }
     } else {
-      dirtyHabits.forEach((habit) => {
-        const history: DateStr[] = dates.filter((date, i) => habit.history[i]);
-        const storedData: IHabitMeta = {
-          name: habit.name,
-          _id: habit._id,
-          history,
-        }
-        localStorage.setItem(`${LOCAL_STORAGE_PREFIX}${habit._id}`, JSON.stringify(storedData));
-      });
+      updateLocalHabits(dirtyHabits, dates);
     }
   };
 }
@@ -94,19 +71,7 @@ export const loadHabits = (
       habitHistory = await loadHabitsFromServer(displayedDates, getState().user.token)
     }
     else {
-      const habitIds: string[] = JSON.parse(localStorage.getItem(LOCAL_STORAGE_HABIT_IDS) || '[]');
-      if (Array.isArray(habitIds)) {
-        const storedData: IHabitMeta[] = [];
-        habitIds?.forEach(id => {
-          const storedHabitMeta = localStorage.getItem(`${LOCAL_STORAGE_PREFIX}${id}`);
-          if (storedHabitMeta) {
-            storedData.push(JSON.parse(storedHabitMeta));
-          }
-        });
-        habitHistory = transtlateDatesToView(storedData, displayedDates);
-      } else {
-        console.error('Invalid data is present in local storage for habit ids');
-      }
+      habitHistory = loadLocalHabits(displayedDates);      
     }
     const loadAppPayload = {
       ownerId: getState().user.userId, // TODO: set this properly
