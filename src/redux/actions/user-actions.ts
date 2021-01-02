@@ -51,6 +51,7 @@ export const autoLoginFromBearer = (
       return dispatch(SetUserInfoAction(payload));
     } catch (error) {
       localStorage.removeItem('BEARER_TOKEN');
+      console.error('auto login error', error);
       return Promise.reject(error);
     }
   };
@@ -89,6 +90,7 @@ export const loginUser = (
       dispatch(SetUserInfoAction(payload));
       localStorage.setItem('BEARER_TOKEN', payload.token);
     } catch (error) {
+      console.error('error logging in', error);
       return Promise.reject(error);
     }
   };
@@ -131,7 +133,10 @@ export const createUser = (
       };
       dispatch(SetUserInfoAction(payload));
       localStorage.setItem('BEARER_TOKEN', payload.token);
-    } catch (error) { }
+    } catch (error) { 
+      console.error('error creating user', error);
+      return Promise.reject(error);
+    }
   };
 };
 
@@ -158,7 +163,7 @@ export const logoutUser = (): ThunkAction<
       localStorage.removeItem('BEARER_TOKEN');
       return dispatch(ResetUserInfoAction());
     } catch (error) {
-      console.error('error logging out');
+      console.error('error logging out', error);
       return Promise.reject(error);
     }
   };
