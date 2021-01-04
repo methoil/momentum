@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { AppEvents } from '../events';
@@ -49,9 +48,10 @@ export const autoLoginFromBearer = (
         loggedIn: true,
       };
 
-      dispatch(SetUserInfoAction(payload));
+      return dispatch(SetUserInfoAction(payload));
     } catch (error) {
       localStorage.removeItem('BEARER_TOKEN');
+      console.error('auto login error', error);
       return Promise.reject(error);
     }
   };
@@ -90,6 +90,7 @@ export const loginUser = (
       dispatch(SetUserInfoAction(payload));
       localStorage.setItem('BEARER_TOKEN', payload.token);
     } catch (error) {
+      console.error('error logging in', error);
       return Promise.reject(error);
     }
   };
@@ -132,7 +133,10 @@ export const createUser = (
       };
       dispatch(SetUserInfoAction(payload));
       localStorage.setItem('BEARER_TOKEN', payload.token);
-    } catch (error) {}
+    } catch (error) { 
+      console.error('error creating user', error);
+      return Promise.reject(error);
+    }
   };
 };
 
@@ -143,22 +147,24 @@ export const logoutUser = (): ThunkAction<
   Action<string>
 > => {
   return async (dispatch, getState) => {
-    const logoutPromise = await fetch(
-      `${process.env.REACT_APP_SERVER_URL}/users/logout`,
-      {
-        method: 'POST',
-        headers: { Authorization: getState().user.token },
-      }
-    );
-    // const res = await logoutPromise.json();
-    if (logoutPromise.status > 210 || logoutPromise.status < 200) {
-      return Promise.reject(logoutPromise.statusText);
-    }
-
-    localStorage.removeItem('BEARER_TOKEN');
-    dispatch(ResetUserInfoAction());
-
     try {
-    } catch (error) {}
+      const logoutPromise = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/users/logout`,
+        {
+          method: 'POST',
+          headers: { Authorization: getState().user.token },
+        }
+      );
+      // const res = await logoutPromise.json();
+      if (logoutPromise.status > 210 || logoutPromise.status < 200) {
+        return Promise.reject(logoutPromise.statusText);
+      }
+
+      localStorage.removeItem('BEARER_TOKEN');
+      return dispatch(ResetUserInfoAction());
+    } catch (error) {
+      console.error('error logging out', error);
+      return Promise.reject(error);
+    }
   };
 };

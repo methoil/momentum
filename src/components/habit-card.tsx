@@ -1,19 +1,21 @@
 import React from "react";
 import "./css/habit-card.scss";
-import { IHabitMeta } from "../habits.model";
+import RemoveHabitButton from './remove-habit-button';
+
 
 interface IProps {
   name: string,
-  type?: string,
+  _id: string,
 }
 
 export default function HabitCard(props: IProps) {
-  const { name, type } = props;
+  const { name, _id } = props;
   return (
     <div className="habit-card">
-      <div className="habit-card-text-item strong">{name}</div>
-      <div className="habit-card-text-item">{type || 'daily'}</div>
-      {/* <div className="habit-card-text-item">{history}</div> */}
+      <div className="habit-card-remove-button">
+        <RemoveHabitButton name={name} _id={_id}></RemoveHabitButton>
+      </div>
+      <div className="habit-card-title strong">{name}</div>
     </div>
   );
 }

@@ -1,3 +1,6 @@
+import { IHabitMeta } from "../habits.model";
+import { IHabit } from "../redux/reducer";
+
 export function generateDisplayedDates(daysBack: number): DateStr[] {
   const labels: DateStr[] = [];
   const date = new Date();
@@ -28,3 +31,25 @@ function checkValidDateStr(str: string): str is DateStr {
 enum DateStrBrand {}
 
 export type DateStr = string & DateStrBrand;
+
+export const transtlateDatesToView = (
+  storedData: Array<IHabitMeta>,
+  displayedDates: DateStr[]
+): IHabit[] => {
+  return storedData.map((habit) => {
+    const { name, _id } = habit;
+    const history = habit.history;
+
+    let habitDateIdx = 0;
+    const combined = new Array(displayedDates.length);
+    for (let i = 0; i < displayedDates.length; i++) {
+      if (displayedDates[i] === history[habitDateIdx]) {
+        combined[i] = true;
+        habitDateIdx++;
+      } else {
+        combined[i] = false;
+      }
+    }
+    return { name, _id, history: combined, dirty: false };
+  });
+};

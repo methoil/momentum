@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { DateStr } from "../services/date-utils";
 import "./css/link.scss";
+const skillupAudio = new Audio(`/audio/morrowind-skillup.mp3`);
 
 interface ILinkProps {
   active: boolean;
   date: DateStr;
+  index: number;
   callback: () => void;
 }
 
@@ -23,8 +25,9 @@ export default function Link(props: ILinkProps) {
   }
 
   function toggleStatus(event: React.MouseEvent) {
-    // TODO: set this in store
-    // setActive(!active);
+    if (props.index === 0 && !active) {
+      skillupAudio.play();
+    }
     props.callback();
   }
 }

@@ -15,6 +15,13 @@
     color: white;
 }
 
+.date-label-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 4.5rem;
+}
+
 /* todo - add vars for these to connect to habit-card + link .scss */
 .date-string-in-title {
     width: 6rem;

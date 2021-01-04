@@ -1,24 +1,46 @@
 .habit-card {
-  display: flex;
+  position: relative;
+  display: flex;  
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: baseline;
+  justify-content: center;
+  align-items: center;
   background-color: aliceblue;
   height: 7rem;
   min-width: 9rem;
   margin: 1rem;
   border: solid black 2px;
+  border-radius: 2rem;
+
+  & .habit-card-remove-button {
+    visibility: hidden;
+  }
+
+  &:hover > .habit-card-remove-button {
+    visibility: visible;
+  }
 }
 
-.habit-card-text-item {
-  padding-left: 0.5rem;
+.habit-card-title-container {
+  height: 100%;
+  width: 100%;
+  display: flex;  
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.strong {
+.habit-card-title {
   font-weight: bold;
 }
 
+.habit-card-remove-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 .active-link-connector {
+  z-index: 0;
   margin: 0 -3rem 0 -3rem;
   min-width: 6rem;
   height: 1rem;
