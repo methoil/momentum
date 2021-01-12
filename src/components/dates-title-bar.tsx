@@ -31,7 +31,7 @@ export const TitleBar: React.FC<IProps> = ({ dates }) => {
 
   return (
     <div className="time-period-container dates-title-bar">
-      <div className="date-titlebar-left-label">Habits:</div>
+      <div className="date-titlebar-left-label"></div>
       {nameElements}
     </div>
   );

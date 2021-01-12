@@ -1,14 +1,13 @@
-.chains-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    overflow-x: auto;
-}
-
 .time-period-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+}
+
+@media screen and (min-width: 900px) {
+    .time-period-container {
+        flex-direction: row;
+    }
 }
 
 .dates-title-bar {
@@ -29,6 +28,8 @@
 }
 
 .date-titlebar-left-label {
-    width: 11rem;
+    width: 11rem; // 9 + 2, from habit-card.scss
     min-width: 11rem;
+    height: 9rem; // 7 + 2
+    min-height: 9rem;
 }

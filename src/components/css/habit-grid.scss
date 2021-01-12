@@ -1,3 +1,13 @@
+.grid-view-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+}
+
+.chains-container {
+  display: flex;
+  overflow: auto;
+}
 
 @media screen and (max-width: 899px)
 {
@@ -11,6 +21,10 @@
     flex-direction: column;
     padding: 1rem;
   }
+
+  .chains-container {
+    flex-direction: row;
+  }
 }
 
 @media screen and (min-width: 900px){
@@ -23,6 +37,10 @@
     grid-column: 3;
     align-self: center;
     padding: 1rem;
+  }
+
+  .chains-container {
+    flex-direction: column;
   }
   
   #grid-view-title {

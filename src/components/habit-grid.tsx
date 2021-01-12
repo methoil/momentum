@@ -29,20 +29,6 @@ export default function HabitGrid() {
     5000
   );
 
-  const displayedDates = useSelector((state: IState) => state.displayedDates);
-  const habitElements: JSX.Element[] = [];
-
-  habitIds.map((id) => {
-    const chainComp = (
-      <HabitChain
-        habitId={id}
-        key={id}
-        throttledSaveDates={throttledSaveDates}
-      ></HabitChain>
-    );
-    habitElements.push(chainComp);
-  });
-
   const onLoggout = async () => {
     try {
       await dispatch(logoutUser());
@@ -56,21 +42,36 @@ export default function HabitGrid() {
     browserHistory.push('login');
   }
 
+  const displayedDates = useSelector((state: IState) => state.displayedDates);
+  const habitElements: JSX.Element[] = habitIds.map((id) => {
+    return (
+      <HabitChain
+        habitId={id}
+        key={id}
+        throttledSaveDates={throttledSaveDates}
+      ></HabitChain>
+    );
+  });
+
+  const LoginComponent = () => {
+    return <div className="grid-login-info-container app-text">
+      {user.loggedIn ?
+        <>
+          <p>Logged in as {user.username}</p>
+          <Button onClick={() => onLoggout()}>Log Out</Button>
+        </> :
+        <>
+          <p>You are not logged in - Log in or create an account to persist your habits and access them from other devices.</p>
+          <Button onClick={() => toLogginView()}>Log In</Button>
+        </>}
+    </div>
+  }
+
   return (
-    <div>
+    <div className="grid-view-container">
       <header className="grid-view-header">
-      <h1 className="App-header" id="grid-view-title">Momentum</h1>
-        <div className="grid-login-info-container app-text">
-          {user.loggedIn ?
-            <>
-              <p>Logged in as {user.username}</p>
-              <Button onClick={() => onLoggout()}>Log Out</Button>
-            </> :
-            <>
-              <p>You are not logged in - Log in or create an account to persist your habits and access them from other devices.</p>
-              <Button onClick={() => toLogginView()}>Log In</Button>
-            </>}
-        </div>
+        <h1 className="App-header" id="grid-view-title">Momentum</h1>
+        <LoginComponent></LoginComponent>
       </header>
       <div className="chains-container">
         <TitleBar dates={displayedDates}></TitleBar>
