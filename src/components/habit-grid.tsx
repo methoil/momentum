@@ -58,18 +58,20 @@ export default function HabitGrid() {
 
   return (
     <div>
-      <div className="grid-login-logout-info app-text">
-        {user.loggedIn ?
-          <>
-            <p>Logged in as {user.username}</p>
-            <Button onClick={() => onLoggout()}>Log Out</Button>
-          </> :
-          <>
-            <p>You are not logged in - Log in or create an account to persist your habits and access them from other devices.</p>
-            <Button onClick={() => toLogginView()}>Log In</Button>
-          </>}
-      </div>
-      <h1 className="App-header">Momentum</h1>
+      <header className="grid-view-header">
+      <h1 className="App-header" id="grid-view-title">Momentum</h1>
+        <div className="grid-login-info-container app-text">
+          {user.loggedIn ?
+            <>
+              <p>Logged in as {user.username}</p>
+              <Button onClick={() => onLoggout()}>Log Out</Button>
+            </> :
+            <>
+              <p>You are not logged in - Log in or create an account to persist your habits and access them from other devices.</p>
+              <Button onClick={() => toLogginView()}>Log In</Button>
+            </>}
+        </div>
+      </header>
       <div className="chains-container">
         <TitleBar dates={displayedDates}></TitleBar>
         {habitElements}
