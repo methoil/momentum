@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-// import "./habit-chain.scss";
+import "./css/habit-chain.scss";
 import Link from "./link";
 import HabitCard from "./habit-card";
 import { IState } from "../redux/reducer";

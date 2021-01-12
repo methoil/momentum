@@ -1,0 +1,15 @@
+.active-link-connector {
+  z-index: 0;
+  margin: -3rem 0 -3rem 0;
+  min-width: 1rem;
+  height: 6rem;
+  background-color: violet;
+}
+
+@media screen and (min-width: 900px) {
+  .active-link-connector {
+    margin: 0 -3rem 0 -3rem;
+    min-width: 6rem;
+    height: 1rem;
+  }
+}
