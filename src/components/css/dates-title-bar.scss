@@ -17,8 +17,14 @@
 .date-label-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 4.5rem;
+    justify-content: center;
+    height: 5rem;
+}
+
+@media screen and (min-width: 900px) {
+    .date-label-container {
+        justify-content: space-between;
+    }
 }
 
 /* todo - add vars for these to connect to habit-card + link .scss */

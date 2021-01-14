@@ -19,9 +19,10 @@ export const TitleBar: React.FC<IProps> = ({ dates }) => {
     const year = dateParts?.[0];
 
     const monthYearLabel = `${month} ${year}`;
+    const showYear = window.matchMedia('(min-width:900px)').matches;
     return (
       <div key={date} className="date-label-container">
-        <div className="date-string-in-title">{idx === 0 || dates[idx - 1].split('-')[1] !== `${monthNum}` ? monthYearLabel : ` `}</div>
+        <div className="date-string-in-title">{showYear && (idx === 0 || dates[idx - 1].split('-')[1] !== `${monthNum}`) ? monthYearLabel : ` `}</div>
         <Tooltip title={monthYearLabel}>
           <div className="date-string-in-title">{`${dayOfWeek} ${dayOfMonth}`}</div>
         </Tooltip>
