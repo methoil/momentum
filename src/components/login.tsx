@@ -13,7 +13,7 @@ import { Redirect, useHistory } from 'react-router-dom';
 import useAttemptLogin from '../hooks/useAttemptLogin';
 
 export default function Login() {
-  const dispatch = useDispatch();  
+  const dispatch = useDispatch();
   const [creatingUser, setCreatingUser] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,16 +37,7 @@ export default function Login() {
       <h1 className="App-header">Momentum</h1>
       <div className={'login-controls-box'}>
         <div className="login-control-box-header">
-          <div></div>
-          <h3>{creatingUser ? 'Create Account' : 'Login'}</h3>
-          <div>
-            <Button onClick={() => setCreatingUser(!creatingUser)}>
-              {creatingUser ? 'Login instead' : 'Create new user'}
-            </Button>
-            <Button onClick={() => browserHistory.push('/Dashboard')}>
-              Try Without Account
-            </Button>
-          </div>
+          <h2>{creatingUser ? 'Create Account' : 'Login'}</h2>
         </div>
         <div className={'login-form-containers app-text'}>
           {creatingUser ? (
@@ -74,8 +65,14 @@ export default function Login() {
             />
           </div>
         </div>
-        <div>
-          <Button onClick={submitForms}>Submit</Button>
+        <div className="login-input-buttons-container">
+          <Button className="login-controll-box__input-button" onClick={() => setCreatingUser(!creatingUser)}>
+            {creatingUser ? 'Login instead' : 'Create new user'}
+          </Button>
+          <Button className="login-controll-box__input-button" onClick={() => browserHistory.push('/Dashboard')}>
+            Try Without Account
+            </Button>
+          <Button className="login-controll-box__input-button" onClick={submitForms}>Submit</Button>
         </div>
       </div>
     </div>

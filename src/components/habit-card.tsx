@@ -2,7 +2,6 @@ import React from "react";
 import "./css/habit-card.scss";
 import RemoveHabitButton from './remove-habit-button';
 
-
 interface IProps {
   name: string,
   _id: string,

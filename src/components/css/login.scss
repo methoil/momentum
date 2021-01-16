@@ -10,23 +10,32 @@
   min-height: 100vh;
 }
 
+$control-box-color: rgb(133, 44, 60);
 .login-controls-box {
   @include center-content();
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  width: 35vw;
-  height: 30vh;
-  background-color: rgb(133, 44, 60);
+  width: 70vw;
+  height: 70vh;
+  background-color: $control-box-color;
   border-radius: 2rem;
   border: 2px paleturquoise;
+  box-shadow: 0rem 0rem 2rem 2rem $control-box-color;
+}
+
+@media screen and (min-width: 900px) {
+  .login-controls-box {
+    height: 50vh;
+    width: 50vw;
+  }
 }
 
 .login-control-box-header {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   width: 100%;
 }
@@ -41,4 +50,21 @@
 
 .login-form-label {
   display: flex;
+}
+
+.login-input-buttons-container {
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (min-width: 900px) {
+  .login-input-buttons-container {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+  }
+}
+
+.login-controll-box__input-button {
+  margin: 0 1rem 0 1rem;
 }
